@@ -23,4 +23,6 @@ public class Constants {
     public static final String GET_HELP_TYPES = ENDPOINT + "gethelpertypes";
 
     public static final String SHARE_RESOURCES = ENDPOINT + "helpsomeone";
+
+    public static final String GET_VICTIM_DETAILS = ENDPOINT + "getvictimdetails";
 }

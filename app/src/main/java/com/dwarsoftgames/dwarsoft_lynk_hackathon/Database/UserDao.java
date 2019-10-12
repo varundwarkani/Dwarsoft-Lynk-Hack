@@ -18,6 +18,9 @@ public interface UserDao {
     @Query("SELECT volunteer_id FROM user_table WHERE user_id = 1")
     int getVolunteerID();
 
+    @Query("SELECT phoneNo FROM user_table WHERE user_id = 1")
+    String getPhoneNumber();
+
     @Query("UPDATE user_table SET volunteer_id = :volunteerID WHERE user_id = 1")
     void updateVolunteerID(int volunteerID);
 

@@ -114,6 +114,8 @@ public class VolunteerAuth extends AppCompatActivity {
     private void parseAuth(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
+                sharedPreferences.edit().putString("phoneNo",phoneNumber).apply();
+                db.userDao().updatePhoneNo(phoneNumber);
                 if (jsonObject.getBoolean("isNewUser")) {
                     openAuthDetails();
                 } else {
@@ -136,7 +138,6 @@ public class VolunteerAuth extends AppCompatActivity {
 
     private void openAuthDetails() {
         sharedPreferences.edit().putBoolean("volunteerDetails",false).apply();
-        db.userDao().updatePhoneNo(phoneNumber);
 
         Intent intent = new Intent(VolunteerAuth.this, VolunteerAuthDetails.class);
         startActivity(intent);

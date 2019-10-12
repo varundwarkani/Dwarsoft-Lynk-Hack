@@ -13,6 +13,7 @@ import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer.VolunteerAut
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer.VolunteerAuthDetails;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer.VolunteerDashboard;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.user_table;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
 import com.google.android.material.button.MaterialButton;
 
@@ -54,6 +55,16 @@ public class MainActivity extends AppCompatActivity {
 
         db = AppDatabase.getAppDatabase(getApplicationContext());
         sharedPreferences = getSharedPreferences(SHAREDPREF,MODE_PRIVATE);
+
+        if (sharedPreferences.getBoolean("firstTime",true)) {
+            sharedPreferences.edit().putBoolean("firstTime",false).apply();
+            user_table user_table = new user_table();
+            user_table.setUser_id(1);
+            user_table.setPhoneNo("");
+            user_table.setVictim_id(0);
+            user_table.setVolunteer_id(0);
+            db.userDao().insertAll(user_table);
+        }
     }
 
     private void setOnClicks() {

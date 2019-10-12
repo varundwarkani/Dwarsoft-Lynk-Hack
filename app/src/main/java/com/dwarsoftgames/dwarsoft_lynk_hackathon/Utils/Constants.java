@@ -8,6 +8,8 @@ public class Constants {
 
     public static final String VOLUNTEER_AUTH = ENDPOINT + "volunteerauth";
 
+    public static  final String VOLUNTEER_INSERT = ENDPOINT + "volunteerinsert";
+
     public static final String STATES = ENDPOINT + "getstates";
 
     public static final String CITY = ENDPOINT + "getcities";

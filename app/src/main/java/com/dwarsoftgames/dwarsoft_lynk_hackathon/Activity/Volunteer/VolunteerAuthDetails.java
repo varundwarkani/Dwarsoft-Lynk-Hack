@@ -51,6 +51,7 @@ import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AREA;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.CITY;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPREF;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.STATES;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.VOLUNTEER_INSERT;
 
 public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -75,6 +76,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
 
     private String areaID = "1";
     private String address;
+    private String name;
     private double latitude;
     private double longitude;
 
@@ -166,7 +168,9 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
         btEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
+                if (validateData()) {
+                    post_authDetails();
+                }
             }
         });
 
@@ -303,6 +307,91 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
         }
     }
 
+    private boolean validateData() {
+        name = etName.getText().toString().trim();
+        if (name.length() > 2) {
+            tiName.setErrorEnabled(false);
+        } else {
+            tiName.setErrorEnabled(true);
+            tiName.setError("Please enter proper Name");
+            return false;
+        }
+
+        if (latitude == 0 || longitude == 0) {
+            getLocation();
+        }
+
+        if (address == null) {
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.address_fail), Snackbar.LENGTH_LONG);
+            snackbar.show();
+
+            return false;
+        }
+
+        if (address.equalsIgnoreCase("")) {
+            getAddress();
+        }
+
+        return true;
+    }
+
+    private void post_authDetails() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("phoneNo",db.userDao().getPhoneNumber());
+//        params.put("phoneNo",sharedPreferences.getString("phoneNo",""));
+        params.put("Name",name);
+        params.put("Address",address);
+        params.put("Latitude", String.valueOf(latitude));
+        params.put("Longitude", String.valueOf(longitude));
+        params.put("AreaID",areaID);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                VOLUNTEER_INSERT, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        parseResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
+
+        jsonObjReq.setTag("VolunteerAuthDetails");
+        requestQueue.add(jsonObjReq);
+    }
+
+    private void parseResponse(JSONObject jsonObject) {
+
+        try {
+            if (jsonObject.getBoolean("isSuccess")) {
+                sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
+                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                successfulResponse(jsonObject1.getInt("insertId"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void successfulResponse(int VolunteerID) {
+        sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
+        db.userDao().updateVolunteerID(VolunteerID);
+
+        openDashboard();
+    }
+
+    private void openDashboard() {
+        Intent intent = new Intent(VolunteerAuthDetails.this, VolunteerDashboard.class);
+        startActivity(intent);
+        finish();
+    }
+
+    //Location
     private void getLocation() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocationClient.getLastLocation()
@@ -332,7 +421,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
 //            String country = addresses.get(0).getCountryName();
 //            String postalCode = addresses.get(0).getPostalCode();
 //            String knownName = addresses.get(0).getFeatureName();
-            String setAddress = "Address " + address;
+            String setAddress = "Address - " + address;
             tvAddress.setText(setAddress);
         } catch (IOException e) {
             e.printStackTrace();

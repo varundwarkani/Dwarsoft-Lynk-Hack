@@ -59,7 +59,7 @@
         android:layout_above="@+id/imgVolu"
         android:layout_marginBottom="40dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/target" />
+        android:src="@drawable/victim" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"

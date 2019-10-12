@@ -44,7 +44,8 @@ public class VolunteerDashboard extends AppCompatActivity {
         btHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(VolunteerDashboard.this, VictimHelpMap.class);
+                startActivity(intent);
             }
         });
 

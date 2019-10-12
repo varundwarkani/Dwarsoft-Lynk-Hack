@@ -4,11 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,8 +34,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -45,9 +58,11 @@ import java.util.Map;
 
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AREA;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.CITY;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_HELP_TYPES;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_VICTIM_DETAILS;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPREF;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.STATES;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Utilities.UTCToIST;
 
 public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -85,14 +100,13 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
         window.setStatusBarColor(getResources().getColor(R.color.white));
 
         init();
+        initMaps();
         setAdapters();
         setSpinnerListeners();
 
         post_state();
         post_city("1");
         post_area("1");
-
-        post_getVictimDetails();
     }
 
     private void init() {
@@ -110,6 +124,13 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
         states.clear();
         city.clear();
         area.clear();
+    }
+
+    private void initMaps() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        assert mapFragment != null;
+        mapFragment.getMapAsync(this);
     }
 
     private void setAdapters() {
@@ -143,6 +164,46 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 areaID = area.get(position);
                 post_getVictimDetails();
+            }
+        });
+    }
+
+    private void initMapDetails() {
+
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                LinearLayout info = new LinearLayout(getApplicationContext());
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(getApplicationContext());
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(getApplicationContext());
+                snippet.setTextColor(Color.GRAY);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
+            }
+        });
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+
             }
         });
     }
@@ -306,13 +367,18 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
                 for (int i=0; i<jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                     VictimsHelpModel victimsHelpModel = new VictimsHelpModel();
+                    victimsHelpModel.setVHMapID(jsonObject1.getInt("VHMapID"));
                     victimsHelpModel.setVictimID(jsonObject1.getInt("VictimID"));
-                    victimsHelpModel.setAreaID(jsonObject1.getInt("VictimID"));
-                    victimsHelpModel.setName(jsonObject1.getString("Name"));
+                    victimsHelpModel.setHelpID(jsonObject1.getInt("HelpID"));
+                    victimsHelpModel.setAreaID(jsonObject1.getInt("AreaID"));
+                    victimsHelpModel.setDescription(jsonObject1.getString("Description"));
+                    victimsHelpModel.setMembers(jsonObject1.getString("Members"));
+                    victimsHelpModel.setMale(jsonObject1.getString("Male"));
+                    victimsHelpModel.setFemale(jsonObject1.getString("Female"));
+                    victimsHelpModel.setChildren(jsonObject1.getString("Children"));
+                    victimsHelpModel.setLatitude(jsonObject1.getString("latitude"));
+                    victimsHelpModel.setLongitude(jsonObject1.getString("longitude"));
                     victimsHelpModel.setPhoneNo(jsonObject1.getString("PhoneNo"));
-                    victimsHelpModel.setAddress(jsonObject1.getString("Address"));
-                    victimsHelpModel.setLatitude(jsonObject1.getString("Latitude"));
-                    victimsHelpModel.setLongitude(jsonObject1.getString("Longitude"));
                     victimsHelpModel.setCreatedOn(jsonObject1.getString("createdOn"));
                     victimsHelpModel.setUpdatedOn(jsonObject1.getString("updatedOn"));
                     itemsList.add(victimsHelpModel);
@@ -325,24 +391,65 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
     }
 
     private void setMapMarkers() {
-        Map<LatLng, String> mMarkers = new HashMap<>();
         for (int i=0; i<itemsList.size(); i++) {
             VictimsHelpModel victimsHelpModel = (VictimsHelpModel) itemsList.get(i);
+
+            int helpID = victimsHelpModel.getHelpID();
+            String helpName;
+            if (helpID == 1) {
+                helpName = "Food";
+            } else if (helpID == 2) {
+                helpName = "Clothes";
+            } else {
+                helpName = "Shelter";
+            }
+            //TODO: Set Color
+            BitmapDescriptor bitmapDescriptor = null;
+            if (helpName.equalsIgnoreCase("food")) {
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+            } else if (helpName.equalsIgnoreCase("clothes")) {
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+            } else {
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+            }
+
             LatLng latlng = new LatLng(Double.parseDouble(victimsHelpModel.getLatitude()),Double.parseDouble(victimsHelpModel.getLongitude()));
             Marker marker = mMap.addMarker(new MarkerOptions()
-                    .title(victimsHelpModel.getName())
-                    .snippet(victimsHelpModel.getAddress()+"\nPhone No: "+victimsHelpModel.getPhoneNo())
+                    .title("Required - " + helpName)
+                    .snippet(
+                            "Description - " + victimsHelpModel.getDescription()+"\n"
+                            + "Members - " + victimsHelpModel.getMembers()+"\n"
+                            + "Male - " + victimsHelpModel.getMale()+"\n"
+                            + "Female - " + victimsHelpModel.getFemale()+"\n"
+                            + "Children - " + victimsHelpModel.getChildren()+"\n"
+                            + "Date - " + UTCToIST(victimsHelpModel.getCreatedOn())+"\n"
+                            + "Phone No - " + victimsHelpModel.getPhoneNo()
+                    )
                     .position(latlng)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    .icon(bitmapDescriptor)
             );
-            marker.setTag(victimsHelpModel.getVictimID());
+            marker.setTag(victimsHelpModel.getVHMapID());
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        setMaps();
+        initMapDetails();
+        post_getVictimDetails();
+    }
+
+    private void setMaps() {
         mMap.setMyLocationEnabled(true);
+        CameraUpdate center = CameraUpdateFactory.newLatLng(
+                new LatLng(Double.parseDouble(db.userDao().getLatitude()),
+                        Double.parseDouble(db.userDao().getLongitude())
+                )
+        );
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+        mMap.moveCamera(center);
+        mMap.animateCamera(zoom);
     }
 
     @Override

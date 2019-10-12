@@ -51,7 +51,8 @@ public class VolunteerDashboard extends AppCompatActivity {
         btResources.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(VolunteerDashboard.this, ShareResources.class);
+                startActivity(intent);
             }
         });
 

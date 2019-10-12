@@ -12,9 +12,9 @@
     <string name="phone_number">Phone Number</string>
     <string name="enter">Enter</string>
     <string name="help_someone">Help Someone</string>
-    <string name="share_resources">Share Resources</string>
     <string name="api_fail">Server Error</string>
     <string name="group_created_success">Group Created Successfully!</string>
+    <string name="share_resources_success">Resource Shared Successfully!</string>
     <string name="address_fail">Please Select Address</string>
     <string name="volunteer_details">Volunteer Details</string>
     <string name="name">Name</string>
@@ -28,4 +28,7 @@
     <string name="number_of_members_allowed">Number Of Members Allowed</string>
     <string name="group_link">Group Link</string>
     <string name="create_group">Create Group</string>
+    <string name="share_resources">Share Resources</string>
+    <string name="describe_your_resource">Describe Your Resource</string>
+    <string name="share">Share</string>
 </resources>

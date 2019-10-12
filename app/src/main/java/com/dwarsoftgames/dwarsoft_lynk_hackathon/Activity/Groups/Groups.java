@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -394,19 +395,29 @@ public class Groups extends AppCompatActivity {
         public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof GroupViewHolder) {
                 GroupViewHolder groupViewHolder = (GroupViewHolder) holder;
-                GroupDetailsModel groupDetailsModel = (GroupDetailsModel) mRecyclerViewItems_adapter.get(position);
+                final GroupDetailsModel groupDetailsModel = (GroupDetailsModel) mRecyclerViewItems_adapter.get(position);
 
                 groupViewHolder.tvName.setText(groupDetailsModel.getName());
                 groupViewHolder.tvDescription.setText(groupDetailsModel.getDescription());
                 groupViewHolder.tvDate.setText(groupDetailsModel.getCreatedOn());
                 groupViewHolder.tvDistance.setText(groupDetailsModel.getDistance());
                 groupViewHolder.tvMembers.setText(groupDetailsModel.getMembers());
+
+                groupViewHolder.btOpen.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(groupDetailsModel.getLink()));
+                        startActivity(i);
+                    }
+                });
             }
         }
 
         private class GroupViewHolder extends RecyclerView.ViewHolder {
 
             private TextView tvName, tvDescription, tvDate, tvDistance, tvMembers;
+            private MaterialButton btOpen;
 
             GroupViewHolder(View itemView) {
                 super(itemView);
@@ -415,6 +426,7 @@ public class Groups extends AppCompatActivity {
                 tvDate = itemView.findViewById(R.id.tvDate);
                 tvDistance = itemView.findViewById(R.id.tvDistance);
                 tvMembers = itemView.findViewById(R.id.tvMembers);
+                btOpen = itemView.findViewById(R.id.btOpen);
             }
         }
 

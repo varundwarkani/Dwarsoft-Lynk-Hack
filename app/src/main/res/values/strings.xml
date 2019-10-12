@@ -31,5 +31,8 @@
     <string name="share_resources">Share Resources</string>
     <string name="describe_your_resource">Describe Your Resource</string>
     <string name="share">Share</string>
-    <string name="join_group">JOIN GROUP</string>
+    <string name="join_group">Join Group</string>
+    <string name="gps_title">GPS Required</string>
+    <string name="gps_description">GPS is required for better Service. Please enable it.</string>
+    <string name="okay">Okay</string>
 </resources>

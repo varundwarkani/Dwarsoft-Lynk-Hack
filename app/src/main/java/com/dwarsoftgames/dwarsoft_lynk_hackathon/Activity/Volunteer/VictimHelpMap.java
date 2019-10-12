@@ -403,7 +403,6 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
             } else {
                 helpName = "Shelter";
             }
-            //TODO: Set Color
             BitmapDescriptor bitmapDescriptor = null;
             if (helpName.equalsIgnoreCase("food")) {
                 bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);

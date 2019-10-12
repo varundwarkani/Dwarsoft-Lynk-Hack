@@ -1,4 +1,4 @@
-package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer;
+package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.MainActivity;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
 import com.google.android.material.button.MaterialButton;
@@ -29,10 +30,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AUTH;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPREF;
-import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.VOLUNTEER_AUTH;
 
-public class VolunteerAuth extends AppCompatActivity {
+public class Authentication extends AppCompatActivity {
 
     private TextInputLayout tiPhoneNumber;
     private EditText etPhoneNumber;
@@ -46,7 +47,7 @@ public class VolunteerAuth extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_volunteer_auth);
+        setContentView(R.layout.activity_authentication);
 
         Window window = getWindow();
         // clear FLAG_TRANSLUCENT_STATUS flag:
@@ -92,7 +93,7 @@ public class VolunteerAuth extends AppCompatActivity {
         params.put("phoneNo",phoneNumber);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                VOLUNTEER_AUTH, new JSONObject(params),
+                AUTH, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -106,7 +107,7 @@ public class VolunteerAuth extends AppCompatActivity {
             }
         });
 
-        jsonObjReq.setTag("VolunteerAuth");
+        jsonObjReq.setTag("Auth");
         requestQueue.add(jsonObjReq);
     }
 
@@ -120,8 +121,9 @@ public class VolunteerAuth extends AppCompatActivity {
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
                     JSONObject jsonObject1 = jsonArray.getJSONObject(0);
 
-                    sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
+                    sharedPreferences.edit().putBoolean("user_auth", true).apply();
                     db.userDao().updateVolunteerID(jsonObject1.getInt("VolunteerID"));
+                    db.userDao().updateVictimID(jsonObject1.getInt("VictimID"));
                     db.userDao().updateAreaID(jsonObject1.getString("AreaID"));
 
                     openDashboard();
@@ -132,15 +134,13 @@ public class VolunteerAuth extends AppCompatActivity {
         }
     }
     private void openAuthDetails() {
-        sharedPreferences.edit().putBoolean("volunteerDetails",false).apply();
-
-        Intent intent = new Intent(VolunteerAuth.this, VolunteerAuthDetails.class);
+        Intent intent = new Intent(Authentication.this, AuthenticationDetails.class);
         startActivity(intent);
         finish();
     }
 
     private void openDashboard() {
-        Intent intent = new Intent(VolunteerAuth.this, VolunteerDashboard.class);
+        Intent intent = new Intent(Authentication.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

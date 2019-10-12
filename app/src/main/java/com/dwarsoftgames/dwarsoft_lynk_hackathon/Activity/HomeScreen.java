@@ -16,8 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Victim.VictimDashboard;
-import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer.VolunteerDashboard;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Authentication.Authentication;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.user_table;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
@@ -38,22 +37,20 @@ import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPR
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Permissions.checkCoarseLocation;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Permissions.checkFineLocation;
 
-public class MainActivity extends AppCompatActivity {
+public class HomeScreen extends AppCompatActivity {
 
-    private MaterialButton btVolunteer;
-    private MaterialButton btVictim;
-
-    private AppDatabase db;
+    private MaterialButton btV, btOrganization;
     private SharedPreferences sharedPreferences;
 
-    //Location
+    private AppDatabase db;
+
     private FusedLocationProviderClient mFusedLocationClient;
     private Double latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home_screen);
 
         Window window = getWindow();
         // clear FLAG_TRANSLUCENT_STATUS flag:
@@ -69,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        btVictim = findViewById(R.id.btVictim);
-        btVolunteer = findViewById(R.id.btVolunteer);
+        btV = findViewById(R.id.btV);
+        btOrganization = findViewById(R.id.btOrganization);
 
         db = AppDatabase.getAppDatabase(getApplicationContext());
-        sharedPreferences = getSharedPreferences(SHAREDPREF,MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(SHAREDPREF, MODE_PRIVATE);
 
-        if (sharedPreferences.getBoolean("firstTime",true)) {
-            sharedPreferences.edit().putBoolean("firstTime",false).apply();
+        if (sharedPreferences.getBoolean("firstTime", true)) {
+            sharedPreferences.edit().putBoolean("firstTime", false).apply();
             user_table user_table = new user_table();
             user_table.setUser_id(1);
             user_table.setPhoneNo("");
@@ -89,89 +86,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setOnClicks() {
-
-        btVictim.setOnClickListener(new View.OnClickListener() {
+        btV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkPermissions()) {
-                    checkVictim();
+                if (sharedPreferences.getBoolean("user_auth", false)) {
+                    Intent intent = new Intent(HomeScreen.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(HomeScreen.this, Authentication.class);
+                    startActivity(intent);
                 }
             }
         });
 
-        btVolunteer.setOnClickListener(new View.OnClickListener() {
+        btOrganization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkPermissions()) {
-                    checkVolunteer();
-                }
+
             }
         });
     }
 
     private boolean checkPermissions() {
-        if (checkCoarseLocation(MainActivity.this) && checkFineLocation(MainActivity.this)) {
+        if (checkCoarseLocation(HomeScreen.this) && checkFineLocation(HomeScreen.this)) {
             getLocation();
             checkGPS();
             return true;
         } else {
             return false;
         }
-    }
-
-    private void checkGPS() {
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-
-        Task<LocationSettingsResponse> result =
-                LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
-
-        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
-                try {
-                    LocationSettingsResponse response = task.getResult(ApiException.class);
-                    // All location settings are satisfied. The client can initialize location
-                    // requests here.
-                } catch (ApiException exception) {
-                    switch (exception.getStatusCode()) {
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            // Location settings are not satisfied. But could be fixed by showing the
-                            // user a dialog.
-                            try {
-                                // Cast to a resolvable exception.
-                                ResolvableApiException resolvable = (ResolvableApiException) exception;
-                                // Show the dialog by calling startResolutionForResult(),
-                                // and check the result in onActivityResult().
-                                resolvable.startResolutionForResult(
-                                        MainActivity.this,
-                                        LocationRequest.PRIORITY_HIGH_ACCURACY);
-                            } catch (IntentSender.SendIntentException e) {
-                                // Ignore the error.
-                            } catch (ClassCastException e) {
-                                // Ignore, should be an impossible error.
-                            }
-                            break;
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            // Location settings are not satisfied. However, we have no way to fix the
-                            // settings so we won't show the dialog.
-                            break;
-                    }
-                }
-            }
-        });
-    }
-
-    private void checkVolunteer() {
-        Intent intent = new Intent(MainActivity.this, VolunteerDashboard.class);
-        startActivity(intent);
-    }
-
-    private void checkVictim() {
-        Intent intent = new Intent(MainActivity.this, VictimDashboard.class);
-        startActivity(intent);
     }
 
     //Location
@@ -218,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showGPSDialog() {
-        new AlertDialog.Builder(MainActivity.this)
+        new AlertDialog.Builder(HomeScreen.this)
                 .setTitle(getString(R.string.gps_title))
                 .setMessage(getString(R.string.gps_description))
                 .setCancelable(false)
@@ -229,5 +172,50 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    private void checkGPS() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+
+        Task<LocationSettingsResponse> result =
+                LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
+
+        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
+                try {
+                    LocationSettingsResponse response = task.getResult(ApiException.class);
+                    // All location settings are satisfied. The client can initialize location
+                    // requests here.
+                } catch (ApiException exception) {
+                    switch (exception.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be fixed by showing the
+                            // user a dialog.
+                            try {
+                                // Cast to a resolvable exception.
+                                ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                resolvable.startResolutionForResult(
+                                        HomeScreen.this,
+                                        LocationRequest.PRIORITY_HIGH_ACCURACY);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            } catch (ClassCastException e) {
+                                // Ignore, should be an impossible error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have no way to fix the
+                            // settings so we won't show the dialog.
+                            break;
+                    }
+                }
+            }
+        });
     }
 }

@@ -6,9 +6,9 @@ public class Constants {
 
     private static final String ENDPOINT = "http://172.18.13.187:3004/api/";
 
-    public static final String VOLUNTEER_AUTH = ENDPOINT + "volunteerauth";
+    public static final String AUTH = ENDPOINT + "volunteerauth";
 
-    public static  final String VOLUNTEER_INSERT = ENDPOINT + "volunteerinsert";
+    public static final String AUTH_DATA = ENDPOINT + "volunteerinsert";
 
     public static final String STATES = ENDPOINT + "getstates";
 
@@ -25,4 +25,8 @@ public class Constants {
     public static final String SHARE_RESOURCES = ENDPOINT + "helpsomeone";
 
     public static final String GET_VICTIM_DETAILS = ENDPOINT + "getvictimdetails";
+
+    public static final String GET_VOLUNTEER_DETAILS = ENDPOINT + "getvolunteerdetails";
+
+    public static final String REQUEST_HELP = ENDPOINT + "posthelpvictim";
 }

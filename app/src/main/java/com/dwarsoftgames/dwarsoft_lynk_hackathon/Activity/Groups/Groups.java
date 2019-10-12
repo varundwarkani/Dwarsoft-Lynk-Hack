@@ -65,7 +65,7 @@ public class Groups extends AppCompatActivity {
     private ArrayList<String> city = new ArrayList<>();
     private ArrayList<String> area = new ArrayList<>();
 
-    private String areaID = "1";
+    private String areaID;
 
     private final List<Object> mRecyclerViewItems = new ArrayList<>();
 
@@ -106,6 +106,8 @@ public class Groups extends AppCompatActivity {
         db = AppDatabase.getAppDatabase(getApplicationContext());
 
         mRecyclerViewItems.clear();
+
+        areaID = db.userDao().getAreaID();
     }
 
     private void setOnClicks() {
@@ -249,7 +251,9 @@ public class Groups extends AppCompatActivity {
                     city.add(jsonObject1.getString("CityID"));
                     spinnerAdapter_city.add(jsonObject1.getString("CityName"));
                 }
-
+                if (city.size() > 0) {
+                    post_area(city.get(0));
+                }
                 spCity.setAdapter(spinnerAdapter_city);
             }
         } catch (JSONException e) {

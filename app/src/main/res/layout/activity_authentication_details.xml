@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Volunteer.ShareResources"
+    tools:context=".Activity.Authentication.AuthenticationDetails"
     android:background="@color/white">
 
     <TextView
         android:id="@+id/tvHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/share_resources"
+        android:text="@string/volunteer_details"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="25sp"
@@ -19,12 +19,12 @@
         app:layout_constraintTop_toBottomOf="@id/topGuideline"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tiDescription"
+        android:id="@+id/tiName"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
-        android:hint="@string/describe_your_resource"
+        android:hint="@string/name"
         app:boxStrokeColor="@color/black"
         android:textColorHint="@color/black"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
@@ -32,53 +32,129 @@
         app:layout_constraintTop_toBottomOf="@+id/topGuideline1">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDescription"
+            android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:inputType="textMultiLine"
-            android:lines="3"
-            android:maxLines="3"
-            android:minLines="3"
-            android:maxLength="1000"
-            android:gravity="top|start" />
+            android:maxLines="1"
+            android:inputType="textPersonName" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:id="@+id/llHelp"
+    <TextView
+        android:id="@+id/tvAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="@string/click_to_set_address"
+        android:background="@drawable/textview_border"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintEnd_toEndOf="@+id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/tiName" />
+
+    <LinearLayout
+        android:id="@+id/llStates"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:weightSum="10"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@id/tiDescription">
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintEnd_toEndOf="@+id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddress">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="@string/help_type"
+            android:text="State - "
             android:gravity="center"
             android:textColor="@color/black" />
 
         <com.jaredrummler.materialspinner.MaterialSpinner
-            android:id="@+id/spHelp"
+            android:id="@+id/spState"
             android:layout_width="0dp"
-            android:layout_height="50dp"
             android:layout_weight="7"
+            android:layout_height="50dp"
             android:textStyle="bold"
             app:ms_background_color="@color/white"
             app:ms_arrow_tint="@color/black"
             app:ms_text_color="@color/black"
             app:ms_hint_color="@color/black"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="5dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llCity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintEnd_toEndOf="@+id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/llStates">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="City - "
+            android:gravity="center"
+            android:textColor="@color/black" />
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/spCity"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="50dp"
+            android:textStyle="bold"
+            app:ms_background_color="@color/white"
+            app:ms_arrow_tint="@color/black"
+            app:ms_text_color="@color/black"
+            app:ms_hint_color="@color/black"
+            android:layout_marginTop="5dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llArea"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintEnd_toEndOf="@+id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/llCity">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="Area - "
+            android:gravity="center"
+            android:textColor="@color/black" />
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/spArea"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="50dp"
+            android:textStyle="bold"
+            app:ms_background_color="@color/white"
+            app:ms_arrow_tint="@color/black"
+            app:ms_text_color="@color/black"
+            app:ms_hint_color="@color/black"
+            android:layout_marginTop="5dp" />
 
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btShare"
+        android:id="@+id/btEnter"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
         android:layout_width="0dp"
@@ -87,11 +163,11 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         app:cornerRadius="5dp"
-        android:text="@string/share"
+        android:text="@string/sign_in"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="@id/startGuideline1"
         app:layout_constraintEnd_toEndOf="@id/endGuideline1"
-        app:layout_constraintTop_toBottomOf="@id/llHelp" />
+        app:layout_constraintTop_toBottomOf="@id/llArea"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"

@@ -18,6 +18,9 @@ public interface UserDao {
     @Query("SELECT volunteer_id FROM user_table WHERE user_id = 1")
     int getVolunteerID();
 
+    @Query("SELECT victim_id FROM user_table WHERE user_id = 1")
+    int getVictimID();
+
     @Query("SELECT phoneNo FROM user_table WHERE user_id = 1")
     String getPhoneNumber();
 
@@ -44,6 +47,9 @@ public interface UserDao {
 
     @Query("UPDATE user_table SET areaID = :areaID WHERE user_id = 1")
     void updateAreaID(String areaID);
+
+    @Query("UPDATE user_table SET victim_id = :victimID WHERE user_id = 1")
+    void updateVictimID(int victimID);
 
     @Insert
     void insertAll(user_table... user_tables);

@@ -8,9 +8,8 @@
     <string name="i_am_a_victim">Victim</string>
     <string name="i_am_a_volunteer">Volunteer</string>
     <string name="i_represent_organization">Organization</string>
-    <string name="volunteer_authentication">Volunteer Sign In</string>
     <string name="phone_number">Phone Number</string>
-    <string name="enter">Sign In</string>
+    <string name="sign_in">Sign In</string>
     <string name="help_someone">Help Someone</string>
     <string name="api_fail">Server Error</string>
     <string name="group_created_success">Group Created Successfully!</string>
@@ -36,4 +35,16 @@
     <string name="gps_description">GPS is required for better Service. Please enable it.</string>
     <string name="okay">Okay</string>
     <string name="thank_you_for_submitting_your_help">Thank you!\nYour details has been successfully submitted.</string>
+    <string name="victim_volunteer">Victim / Volunteer</string>
+    <string name="i_m_a">I\'m a</string>
+    <string name="disaster_management">DISASTER MANAGEMENT</string>
+    <string name="i_need_help">I Need Help</string>
+    <string name="request_help">Request Help</string>
+    <string name="how_many_members">How Many Members?</string>
+    <string name="no_of_males">No. Of Males? (Optional)</string>
+    <string name="no_of_females">No. Of Females? (Optional)</string>
+    <string name="no_of_children">No. Of Children? (Optional)</string>
+    <string name="help_type">Help Type -</string>
+    <string name="request">Request</string>
+    <string name="describe_your_request">Describe Your Request?</string>
 </resources>

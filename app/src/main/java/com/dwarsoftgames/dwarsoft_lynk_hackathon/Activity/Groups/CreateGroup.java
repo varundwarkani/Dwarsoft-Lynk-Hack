@@ -156,7 +156,7 @@ public class CreateGroup extends AppCompatActivity {
             }
         });
 
-        jsonObjReq.setTag("VolunteerAuth");
+        jsonObjReq.setTag("Authentication");
         requestQueue.add(jsonObjReq);
     }
 

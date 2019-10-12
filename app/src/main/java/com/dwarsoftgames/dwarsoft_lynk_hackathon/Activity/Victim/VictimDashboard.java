@@ -1,21 +1,17 @@
-package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer;
+package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Victim;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -25,46 +21,48 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Models.VolunteerHelpModel;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AREA;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.CITY;
-import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPREF;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_VOLUNTEER_DETAILS;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.STATES;
-import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.VOLUNTEER_INSERT;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Utilities.UTCToIST;
 
-public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class VictimDashboard extends AppCompatActivity implements OnMapReadyCallback {
 
-    private TextInputLayout tiName;
-    private EditText etName;
-    private TextView tvAddress;
     private MaterialSpinner spState, spCity, spArea;
-    private MaterialButton btEnter;
+    private MaterialButton btHelp;
 
     private RequestQueue requestQueue;
     private AppDatabase db;
-    private SharedPreferences sharedPreferences;
+
+    private String areaID;
 
     private ArrayAdapter<String> spinnerAdapter_state;
     private ArrayAdapter<String> spinnerAdapter_city;
@@ -74,19 +72,15 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
     private ArrayList<String> city = new ArrayList<>();
     private ArrayList<String> area = new ArrayList<>();
 
-    private String areaID = "1";
-    private String address;
-    private String name;
-    private double latitude;
-    private double longitude;
+    private final List<Object> itemsList = new ArrayList<>();
 
-    //Location
-    private FusedLocationProviderClient mFusedLocationClient;
+    private GoogleMap mMap;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_volunteer_auth_details);
+        setContentView(R.layout.activity_victim_dashboard);
 
         Window window = getWindow();
         // clear FLAG_TRANSLUCENT_STATUS flag:
@@ -97,11 +91,10 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
         window.setStatusBarColor(getResources().getColor(R.color.white));
 
         init();
+        initMaps();
         setAdapters();
         setSpinnerListeners();
         setOnClicks();
-
-        getLocation();
 
         post_state();
         post_city("1");
@@ -109,17 +102,13 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
     }
 
     private void init() {
-        tiName = findViewById(R.id.tiName);
-        etName = findViewById(R.id.etName);
-        tvAddress = findViewById(R.id.tvAddress);
         spState = findViewById(R.id.spState);
         spCity = findViewById(R.id.spCity);
         spArea = findViewById(R.id.spArea);
-        btEnter = findViewById(R.id.btEnter);
+        btHelp = findViewById(R.id.btHelp);
 
-        requestQueue = Volley.newRequestQueue(getApplicationContext(),null);
+        requestQueue = Volley.newRequestQueue(getApplicationContext(), null);
         db = AppDatabase.getAppDatabase(getApplicationContext());
-        sharedPreferences = getSharedPreferences(SHAREDPREF,MODE_PRIVATE);
 
         spState.setHint("Select State");
         spCity.setHint("Select City");
@@ -128,6 +117,15 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
         states.clear();
         city.clear();
         area.clear();
+
+        areaID = db.userDao().getAreaID();
+    }
+
+    private void initMaps() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        assert mapFragment != null;
+        mapFragment.getMapAsync(this);
     }
 
     private void setAdapters() {
@@ -172,24 +170,57 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 areaID = area.get(position);
+                post_getVolunteerDetails();
             }
         });
     }
 
     private void setOnClicks() {
-        btEnter.setOnClickListener(new View.OnClickListener() {
+        btHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateData()) {
-                    post_authDetails();
-                }
+                Intent intent = new Intent(VictimDashboard.this, VictimHelpResource.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initMapDetails() {
+
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                LinearLayout info = new LinearLayout(getApplicationContext());
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(getApplicationContext());
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(getApplicationContext());
+                snippet.setTextColor(Color.GRAY);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
             }
         });
 
-        tvAddress.setOnClickListener(new View.OnClickListener() {
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
-            public void onClick(View v) {
-                getAddress();
+            public void onInfoWindowClick(Marker marker) {
+
             }
         });
     }
@@ -208,7 +239,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -222,7 +253,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
             if (jsonObject.getBoolean("isSuccess")) {
                 states.clear();
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
-                for (int i=0; i<jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                     states.add(jsonObject1.getString("StateID"));
                     spinnerAdapter_state.add(jsonObject1.getString("StateName"));
@@ -238,7 +269,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
     private void post_city(String stateID) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("StateID",stateID);
+        params.put("StateID", stateID);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 CITY, new JSONObject(params),
@@ -250,7 +281,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -264,12 +295,14 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
             if (jsonObject.getBoolean("isSuccess")) {
                 city.clear();
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
-                for (int i=0; i<jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                     city.add(jsonObject1.getString("CityID"));
                     spinnerAdapter_city.add(jsonObject1.getString("CityName"));
                 }
-
+                if (city.size() > 0) {
+                    post_area(city.get(0));
+                }
                 spCity.setAdapter(spinnerAdapter_city);
             }
         } catch (JSONException e) {
@@ -280,7 +313,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
     private void post_area(String cityID) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("CityID",cityID);
+        params.put("CityID", cityID);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 AREA, new JSONObject(params),
@@ -292,7 +325,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -306,7 +339,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
             if (jsonObject.getBoolean("isSuccess")) {
                 area.clear();
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
-                for (int i=0; i<jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                     area.add(jsonObject1.getString("AreaID"));
                     spinnerAdapter_area.add(jsonObject1.getString("AName"));
@@ -319,142 +352,138 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
         }
     }
 
-    private boolean validateData() {
-        name = etName.getText().toString().trim();
-        if (name.length() > 2) {
-            tiName.setErrorEnabled(false);
-        } else {
-            tiName.setErrorEnabled(true);
-            tiName.setError("Please enter proper Name");
-            return false;
-        }
+    private void post_getVolunteerDetails() {
 
-        if (latitude == 0 || longitude == 0) {
-            getLocation();
-        }
-
-        if (address == null) {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.address_fail), Snackbar.LENGTH_LONG);
-            snackbar.show();
-
-            return false;
-        }
-
-        if (address.equalsIgnoreCase("")) {
-            getAddress();
-        }
-
-        return true;
-    }
-
-    private void post_authDetails() {
+        itemsList.clear();
 
         Map<String, String> params = new HashMap<>();
-        params.put("phoneNo",db.userDao().getPhoneNumber());
-        params.put("Name",name);
-        params.put("Address",address);
-        params.put("Latitude", String.valueOf(latitude));
-        params.put("Longitude", String.valueOf(longitude));
-        params.put("AreaID",areaID);
-
-        db.userDao().updateLatitude(String.valueOf(latitude));
-        db.userDao().updateLongitude(String.valueOf(longitude));
-        db.userDao().updateAreaID(areaID);
+        params.put("AreaID", areaID);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                VOLUNTEER_INSERT, new JSONObject(params),
+                GET_VOLUNTEER_DETAILS, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        parseResponse(response);
+                        parseVolunteer(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
 
-        jsonObjReq.setTag("VolunteerAuthDetails");
+        jsonObjReq.setTag("VictimDetails");
         requestQueue.add(jsonObjReq);
     }
 
-    private void parseResponse(JSONObject jsonObject) {
-
+    private void parseVolunteer(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
-                sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
-                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                successfulResponse(jsonObject1.getInt("insertId"));
+                area.clear();
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    VolunteerHelpModel volunteerHelpModel = new VolunteerHelpModel();
+                    volunteerHelpModel.setVRMapID(jsonObject1.getInt("VRMapID"));
+                    volunteerHelpModel.setVolunteerID(jsonObject1.getInt("VolunteerID"));
+                    volunteerHelpModel.setHelpID(jsonObject1.getInt("HelpID"));
+                    volunteerHelpModel.setAreaID(jsonObject1.getInt("AreaID"));
+                    volunteerHelpModel.setDescription(jsonObject1.getString("Description"));
+                    volunteerHelpModel.setLatitude(jsonObject1.getString("Latitude"));
+                    volunteerHelpModel.setLongitude(jsonObject1.getString("Longitude"));
+                    volunteerHelpModel.setPhoneNo(jsonObject1.getString("PhoneNo"));
+                    volunteerHelpModel.setCreatedOn(jsonObject1.getString("createdOn"));
+                    volunteerHelpModel.setUpdatedOn(jsonObject1.getString("updatedOn"));
+                    itemsList.add(volunteerHelpModel);
+                }
+                setMapMarkers();
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void successfulResponse(int VolunteerID) {
-        sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
-        db.userDao().updateVolunteerID(VolunteerID);
+    private void setMapMarkers() {
+        for (int i = 0; i < itemsList.size(); i++) {
+            VolunteerHelpModel volunteerHelpModel = (VolunteerHelpModel) itemsList.get(i);
 
-        openDashboard();
-    }
+            int helpID = volunteerHelpModel.getHelpID();
+            String helpName;
+            if (helpID == 1) {
+                helpName = "Food";
+            } else if (helpID == 2) {
+                helpName = "Clothes";
+            } else {
+                helpName = "Shelter";
+            }
+            BitmapDescriptor bitmapDescriptor = null;
+            if (helpName.equalsIgnoreCase("food")) {
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+            } else if (helpName.equalsIgnoreCase("clothes")) {
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+            } else {
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+            }
 
-    private void openDashboard() {
-        Intent intent = new Intent(VolunteerAuthDetails.this, VolunteerDashboard.class);
-        startActivity(intent);
-        finish();
-    }
-
-    //Location
-    private void getLocation() {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations, this can be null.
-                        if (location != null) {
-                            // Logic to handle location object
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        }
-                    }
-                });
-    }
-
-    private void getAddress() {
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
-
-        try {
-            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//            String city = addresses.get(0).getLocality();
-//            String state = addresses.get(0).getAdminArea();
-//            String country = addresses.get(0).getCountryName();
-//            String postalCode = addresses.get(0).getPostalCode();
-//            String knownName = addresses.get(0).getFeatureName();
-            String setAddress = "Address - " + address;
-            tvAddress.setText(setAddress);
-        } catch (IOException e) {
-            e.printStackTrace();
+            LatLng latlng = new LatLng(Double.parseDouble(volunteerHelpModel.getLatitude()), Double.parseDouble(volunteerHelpModel.getLongitude()));
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                    .title("Available - " + helpName)
+                    .snippet(
+                            "Description - " + volunteerHelpModel.getDescription() + "\n"
+                                    + "Date - " + UTCToIST(volunteerHelpModel.getCreatedOn()) + "\n"
+                                    + "Phone No - " + volunteerHelpModel.getPhoneNo()
+                    )
+                    .position(latlng)
+                    .icon(bitmapDescriptor)
+            );
+            marker.setTag(volunteerHelpModel.getVRMapID());
         }
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        getLocation();
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        setMaps();
+        initMapDetails();
+        post_getVolunteerDetails();
+    }
+
+    private void setMaps() {
+        mMap.setMyLocationEnabled(true);
+        CameraUpdate center = CameraUpdateFactory.newLatLng(
+                new LatLng(Double.parseDouble(db.userDao().getLatitude()),
+                        Double.parseDouble(db.userDao().getLongitude())
+                )
+        );
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+        mMap.moveCamera(center);
+        mMap.animateCamera(zoom);
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-        Log.d("LynkHack","error 1 : "+i);
+    protected void onResume() {
+        super.onResume();
+
+        if (!checkPlayServices()) {
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "You need to install Google Play Services to use the App properly", Snackbar.LENGTH_SHORT);
+            snackbar.show();
+        }
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d("LynkHack","error 2 : "+connectionResult.getErrorMessage());
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST);
+            } else {
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }

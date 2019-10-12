@@ -16,7 +16,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".Activity.SuccessScreen"></activity>
+        <activity android:name=".Activity.Victim.VictimHelpResource"></activity>
+        <activity android:name=".Activity.HomeScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activity.Victim.VictimDashboard" />
+        <activity android:name=".Activity.SuccessScreen" />
         <activity android:name=".Activity.Volunteer.VictimHelpMap" />
 
         <meta-data
@@ -29,17 +39,10 @@
         <activity android:name=".Activity.Volunteer.ShareResources" />
         <activity android:name=".Activity.Groups.CreateGroup" />
         <activity android:name=".Activity.Groups.Groups" />
-        <activity android:name=".Activity.Volunteer.VolunteerAuthDetails" />
+        <activity android:name=".Activity.Authentication.AuthenticationDetails" />
         <activity android:name=".Activity.Volunteer.VolunteerDashboard" />
-        <activity android:name=".Activity.Volunteer.VolunteerAuth" />
-        <activity android:name=".Activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Activity.Authentication.Authentication" />
+        <activity android:name=".Activity.MainActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"

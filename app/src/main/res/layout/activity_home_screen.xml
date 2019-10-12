@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Activity.MainActivity"
+    tools:context=".Activity.HomeScreen"
     android:background="@color/white">
 
     <TextView
@@ -50,18 +50,17 @@
         android:layout_height="100dp"
         android:paddingStart="10dp"
         android:padding="10dp"
-        android:layout_above="@+id/imgVolu"
+        android:layout_above="@+id/imgorg"
         android:layout_marginBottom="40dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/victim"
-        tools:ignore="RtlSymmetry" />
+        android:src="@drawable/victim" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btVictim"
+        android:id="@+id/btV"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
-        android:layout_toEndOf="@+id/imgVolu"
+        android:layout_toEndOf="@+id/imgvictim"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:backgroundTint="@color/red"
@@ -71,27 +70,27 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="30dp"
         app:cornerRadius="5dp"
-        android:layout_above="@+id/btVolunteer"
-        android:text="@string/i_am_a_victim" />
+        android:layout_above="@+id/btOrganization"
+        android:text="@string/victim_volunteer" />
 
     <ImageView
-        android:id="@+id/imgVolu"
+        android:id="@+id/imgorg"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:paddingStart="10dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/help"
+        android:src="@drawable/team"
         tools:ignore="RtlSymmetry" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btVolunteer"
+        android:id="@+id/btOrganization"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginRight="20dp"
-        android:layout_toEndOf="@+id/imgVolu"
+        android:layout_toEndOf="@+id/imgorg"
         android:backgroundTint="@color/purple"
         android:textColor="@color/white"
         android:layout_marginLeft="20dp"
@@ -101,6 +100,6 @@
         android:textAlignment="center"
         app:cornerRadius="5dp"
         android:layout_marginTop="10dp"
-        android:text="@string/i_am_a_volunteer" />
+        android:text="@string/i_represent_organization" />
 
 </RelativeLayout>

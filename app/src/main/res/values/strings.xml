@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Dwarsoft-Lynk-Hackathon</string>
+    <string name="auto">Auto</string>
+    <string name="none_enhance">Original</string> <!-- Move no enhance to first and rename -->
+    <string name="enhance">Lighten</string>
+    <string name="enhance_sharp">Magic Color</string>
 </resources>

@@ -1,72 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Activity.MainActivity"
+    tools:context=".Activity.Volunteer.VolunteerAuth"
     android:background="@color/white">
 
     <TextView
         android:id="@+id/tvHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+        android:text="@string/volunteer_authentication"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topGuideline"/>
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btVictim"
-        app:rippleColor="@color/white"
-        app:strokeColor="@color/white"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiPhoneNumber"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:backgroundTint="@color/red"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:cornerRadius="5dp"
-        android:text="@string/i_am_a_victim"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@id/topGuideline1"/>
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:hint="@string/phone_number"
+        app:boxStrokeColor="@color/black"
+        android:textColorHint="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintEnd_toEndOf="@+id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/topGuideline1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:inputType="number"
+            android:maxLength="10"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btVolunteer"
+        android:id="@+id/btEnter"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
         android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:backgroundTint="@color/purple"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:cornerRadius="5dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/i_am_a_volunteer"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@id/btVictim"/>
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btOrganization"
-        app:rippleColor="@color/white"
-        app:strokeColor="@color/white"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:layout_height="50dp"
         android:backgroundTint="@color/green"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:cornerRadius="5dp"
+        android:text="@string/enter"
         android:layout_marginTop="10dp"
-        android:text="@string/i_represent_organization"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@id/btVolunteer"/>
+        app:layout_constraintStart_toStartOf="@id/startGuideline1"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline1"
+        app:layout_constraintTop_toBottomOf="@id/tiPhoneNumber"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"
@@ -95,5 +86,19 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent=".2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

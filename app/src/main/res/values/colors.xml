@@ -1,106 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="green">#00bfa5</color>
+<resources>
+
     <color name="colorPrimary">#15557c</color>
     <color name="colorPrimaryDark">#0d4669</color>
     <color name="colorAccent">#f4724d</color>
-    <color name="snow">#FCFBFA</color>
-    <color name="WindowBackground">#FFFFFF</color>
+
     <color name="white">#FFFFFF</color>
-    <color name="colorTextGrey">#828282</color>
-    <color name="color_primary_dark">#1976D2</color>
-    <color name="accent_color">#ffffff</color>
-    <color name="colorVisited">#F57C00</color>
-    <color name="colorNext">#30FF9800</color>
-    <color name="lightgray">#ededed</color>
-    <color name="deeppurple">#7c4dff</color>
-    <color name="yello">#ffb300</color>
-    <color name="testcolorblue">#152b38</color>
-    <color name="red">#ef354e</color>
-    <color name="lightgreen">#62c667</color>
-    <color name="lightpink">#f9e8ea</color>
-    <color name="grey">#e1dfdf</color>
     <color name="black">#000000</color>
-    <color name="onboarding_color">#faf6f6</color>
-    <color name="exceptionActivityBackground">#f4ecec</color>
-    <color name="lightGrey">#e6e8e8</color>
-    <color name="darkGrey">#313030</color>
-    <color name="greenish">#86bb64</color>
-    <color name="bottomNavigationText">#ff6a38</color>
-    <color name="bottomNavigationBackground">#fafafa</color>
-    <color name="titleSkipPayment">#005683</color>
-    <color name="secondaryColorOrange1">#ff9c65</color>
-    <color name="secondaryColorOrange2">#FF6A38</color>
-    <color name="secondaryColorOrange3">#c53808</color>
-    <color name="secondaryColorOrange4">#ff713e</color>
-    <color name="secondaryColorOrange5">#ff703e</color>
-    <color name="secondaryColorOrange6">#ff9861</color>
-    <color name="secondaryColorOrange7">#ff7240</color>
-    <color name="secondaryColorOrange8">#ff7d35</color>
-    <color name="secondaryPink1">#d0021b</color>
-    <color name="backgroundOrTextBlueColor1">#436da4</color>
-    <color name="backgroundOrTextBlueColor2">#004275</color>
-    <color name="backgroundOrTextBlueColor3">#001c49</color>
-    <color name="backgroundOrTextBlueColor4">#e1e8ed</color>
-    <color name="backgroundOrTextOrangeColor1">#ff6a38</color>
-    <color name="backgroundOrTextGreyColor1">#bdbdbd</color>
-    <color name="backgroundOrTextGreyColor2">#8d8d8d</color>
-    <color name="backgroundOrTextGreyColor5">#7f7f7f</color>
-    <color name="backgroundOrTextGreyColor7">#ececec</color>
-    <color name="backgroundOrTextGreyColor6">#d6d6d6</color>
-    <color name="backgroundOrTextGreyColor8">#757575</color>
-    <color name="lightBlue">#e1e8ed</color>
-    <color name="white50Transparency">#80FFFFFF</color>
-    <color name="primaryColorBlue1">#4781b2</color>
-    <color name="primaryColorBlue2">#005582</color>
-    <color name="primaryColorBlue3">#002d55</color>
-    <color name="whiteColor1">#fafafa</color>
-    <color name="whiteColor2">#f2f2f2</color>
-    <color name="whiteColor3">#f9f9f9</color>
-    <color name="backgroundOrTextGreyColor3">#787878</color>
-    <color name="backgroundOrTextGreyColor4">#666666</color>
-    <color name="textGrey">#8e8e8e</color>
-    <color name="textOrange">#ff823d</color>
-    <color name="lightGrey1">#dedede</color>
-    <color name="backgroundOrTextOrangeColor2">#ff6e3b</color>
-    <color name="lightGreeen">#2db821</color>
-    <color name="seperatorLineColor">#dedede</color>
-    <color name="buttonDisableColor">#c5c5c5</color>
-    <color name="toastSuccessMessageColor">#86bb64</color>
-    <color name="toastBackgroundColor">#323232</color>
-    <color name="seperatorColor1">#979797</color>
-    <color name="seperatorColor2">#bdbdbd</color>
-    <color name="incomplete">#DE1271</color>
-    <color name="black50Transparency">#80000000</color>
-    <color name="cui_list_selector_normal">#00000000</color>
-    <color name="cui_list_selector_pressed">#FF4B5D70</color>
-    <color name="cui_background_color">#000000</color>
-    <color name="cui_line_color">#000000</color>
-    <color name="black_40_opacity">#66000000</color>
-    <color name="black_70_opacity">#B3000000</color>
 
-    <color name="grey1">#cccccc</color>
-    <color name="blue2">#005683</color>
-    <color name="orange1">#ff7d35</color>
-    <color name="grey2" tools:ignore="MissingDefaultResource">#9b9b9b</color>
-
-    <color name="blackTransparency">#cc000000</color>
-    <color name="buttonDisabled">#d0d0d0</color>
-    <color name="textColorBlue">#015C8C</color>
-    <color name="textColorLightBlack">#4a4a4a</color>
-    <color name="textColorHint">#bbbbbb</color>
-
-
-    <color name="primaryColourBlue3">#005a89</color>
-    <color name="primaryColourBlue4">#005e90</color>
-    <color name="redColor2">#d0021b</color>
-    <color name="screenBackgroundColor">#f2f2f2</color>
-    <color name="textColorSecondary">#4a4a4a</color>
-    <color name="controlNormal">#737373</color>
-    <color name="error">#fe1d39</color>
-    <color name="scrollBarThumbColor">#e2e2e2</color>
-    <color name="blackDisabled">#555555</color>
-    <color name="lightOrange">#F8E8DF</color>
-
+    <color name="purple">#7c4dff</color>
+    <color name="yellow">#ffb300</color>
+    <color name="red">#ef354e</color>
+    <color name="green">#62c667</color>
 
 </resources>

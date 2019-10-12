@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Activity.MainActivity"
+    tools:context=".Activity.Volunteer.VolunteerDashboard"
     android:background="@color/white">
 
     <TextView
@@ -20,7 +20,7 @@
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btVictim"
+        android:id="@+id/btHelp"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
         android:layout_width="0dp"
@@ -29,14 +29,14 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         app:cornerRadius="5dp"
-        android:text="@string/i_am_a_victim"
+        android:text="@string/help_someone"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintTop_toBottomOf="@id/topGuideline1"/>
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btVolunteer"
+        android:id="@+id/btResources"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
         android:layout_width="0dp"
@@ -46,14 +46,14 @@
         android:textSize="20sp"
         app:cornerRadius="5dp"
         android:layout_marginTop="10dp"
-        android:text="@string/i_am_a_volunteer"
+        android:text="@string/share_resources"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@id/btVictim"/>
+        app:layout_constraintTop_toBottomOf="@id/btHelp"/>
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btOrganization"
+        android:id="@+id/btGroups"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
         android:layout_width="0dp"
@@ -63,10 +63,10 @@
         android:textSize="20sp"
         app:cornerRadius="5dp"
         android:layout_marginTop="10dp"
-        android:text="@string/i_represent_organization"
+        android:text="@string/groups"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@id/btVolunteer"/>
+        app:layout_constraintTop_toBottomOf="@id/btResources"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"

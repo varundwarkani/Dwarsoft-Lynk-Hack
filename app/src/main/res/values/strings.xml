@@ -1,7 +1,21 @@
 <resources>
     <string name="app_name">Dwarsoft-Lynk-Hackathon</string>
+    <string name="maps_key">AIzaSyB-sj_pBHx3TNa1wOu_3QfIe3FmcSAUsYg</string>
     <string name="auto">Auto</string>
     <string name="none_enhance">Original</string> <!-- Move no enhance to first and rename -->
     <string name="enhance">Lighten</string>
     <string name="enhance_sharp">Magic Color</string>
+    <string name="i_am_a_victim">I Am A Victim</string>
+    <string name="i_am_a_volunteer">I Am A Volunteer</string>
+    <string name="i_represent_organization">I Represent Organization</string>
+    <string name="volunteer_authentication">Volunteer Authentication</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="enter">Enter</string>
+    <string name="help_someone">Help Someone</string>
+    <string name="share_resources">Share Resources</string>
+    <string name="groups">Groups</string>
+    <string name="api_fail">Server Error</string>
+    <string name="volunteer_details">Volunteer Details</string>
+    <string name="name">Name</string>
+    <string name="click_to_set_address">Click To Set Address</string>
 </resources>

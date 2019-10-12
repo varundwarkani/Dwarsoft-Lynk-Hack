@@ -1,19 +1,21 @@
-package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Groups;
+package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Authentication;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -22,18 +24,25 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.MainActivity;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer.VolunteerDashboard;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
-import com.dwarsoftgames.dwarsoft_lynk_hackathon.Models.GroupDetailsModel;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,19 +50,25 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AREA;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AUTH_DATA;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.CITY;
-import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_GROUP_DETAILS;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_PROFILE_DETAILS;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPREF;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.STATES;
-import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Utilities.UTCToIST;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.UPDATE_PROFILE_DETAILS;
 
-public class Groups extends AppCompatActivity {
+public class UpdateProfile extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
-    private MaterialButton btCreateGroup;
+    private TextInputLayout tiName;
+    private EditText etName;
+    private TextView tvAddress;
     private MaterialSpinner spState, spCity, spArea;
-    private RecyclerView recyclerView;
+    private MaterialButton btUpdate;
 
     private RequestQueue requestQueue;
     private AppDatabase db;
+    private SharedPreferences sharedPreferences;
 
     private ArrayAdapter<String> spinnerAdapter_state;
     private ArrayAdapter<String> spinnerAdapter_city;
@@ -64,13 +79,18 @@ public class Groups extends AppCompatActivity {
     private ArrayList<String> area = new ArrayList<>();
 
     private String areaID;
+    private String address;
+    private String name;
+    private double latitude;
+    private double longitude;
 
-    private final List<Object> mRecyclerViewItems = new ArrayList<>();
+    //Location
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_groups);
+        setContentView(R.layout.activity_update_profile);
 
         Window window = getWindow();
         // clear FLAG_TRANSLUCENT_STATUS flag:
@@ -81,41 +101,41 @@ public class Groups extends AppCompatActivity {
         window.setStatusBarColor(getResources().getColor(R.color.white));
 
         init();
-        setOnClicks();
         setAdapters();
         setSpinnerListeners();
-        setRecyclerView();
+        setOnClicks();
+
+        getLocation();
 
         post_state();
         post_city("1");
         post_area("1");
 
-        post_groupDetails();
+        post_userDetails();
     }
 
     private void init() {
-        btCreateGroup = findViewById(R.id.btCreateGroup);
+        tiName = findViewById(R.id.tiName);
+        etName = findViewById(R.id.etName);
+        tvAddress = findViewById(R.id.tvAddress);
         spState = findViewById(R.id.spState);
         spCity = findViewById(R.id.spCity);
         spArea = findViewById(R.id.spArea);
-        recyclerView = findViewById(R.id.recyclerView);
+        btUpdate = findViewById(R.id.btUpdate);
 
-        requestQueue = Volley.newRequestQueue(getApplicationContext(),null);
+        requestQueue = Volley.newRequestQueue(getApplicationContext(), null);
         db = AppDatabase.getAppDatabase(getApplicationContext());
+        sharedPreferences = getSharedPreferences(SHAREDPREF, MODE_PRIVATE);
 
-        mRecyclerViewItems.clear();
+        spState.setHint("Select State");
+        spCity.setHint("Select City");
+        spArea.setHint("Select Area");
+
+        states.clear();
+        city.clear();
+        area.clear();
 
         areaID = db.userDao().getAreaID();
-    }
-
-    private void setOnClicks() {
-        btCreateGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Groups.this,CreateGroup.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void setAdapters() {
@@ -160,21 +180,29 @@ public class Groups extends AppCompatActivity {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 areaID = area.get(position);
-                post_groupDetails();
             }
         });
     }
 
-    private void setRecyclerView() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,1));
-        GroupsAdapter groupsAdapter = new GroupsAdapter(mRecyclerViewItems);
-        recyclerView.setAdapter(groupsAdapter);
+    private void setOnClicks() {
+        btUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateData()) {
+                    post_updateUserDetails();
+                }
+            }
+        });
+
+        tvAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAddress();
+            }
+        });
     }
 
     private void post_state() {
-
-        states.clear();
 
         Map<String, String> params = new HashMap<>();
 
@@ -188,7 +216,7 @@ public class Groups extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -200,8 +228,9 @@ public class Groups extends AppCompatActivity {
     private void parseStates(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
+                states.clear();
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
-                for (int i=0; i<jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                     states.add(jsonObject1.getString("StateID"));
                     spinnerAdapter_state.add(jsonObject1.getString("StateName"));
@@ -214,12 +243,52 @@ public class Groups extends AppCompatActivity {
         }
     }
 
-    private void post_city(String stateID) {
-
-        city.clear();
+    private void post_userDetails() {
 
         Map<String, String> params = new HashMap<>();
-        params.put("StateID",stateID);
+        params.put("VolunteerID", String.valueOf(db.userDao().getVolunteerID()));
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                GET_PROFILE_DETAILS, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        parseUserDetails(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
+
+        jsonObjReq.setTag("UserDetails");
+        requestQueue.add(jsonObjReq);
+    }
+
+    private void parseUserDetails(JSONObject jsonObject) {
+        try {
+            if (jsonObject.getBoolean("isSuccess")) {
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                JSONObject jsonObject1 = jsonArray.getJSONObject(0);
+
+                name = jsonObject1.getString("Name");
+                address = jsonObject1.getString("Address");
+                areaID = jsonObject1.getString("AreaID");
+
+                etName.setText(name);
+                tvAddress.setText(address);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void post_city(String stateID) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("StateID", stateID);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 CITY, new JSONObject(params),
@@ -231,7 +300,7 @@ public class Groups extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -243,8 +312,9 @@ public class Groups extends AppCompatActivity {
     private void parseCity(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
+                city.clear();
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
-                for (int i=0; i<jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                     city.add(jsonObject1.getString("CityID"));
                     spinnerAdapter_city.add(jsonObject1.getString("CityName"));
@@ -261,10 +331,8 @@ public class Groups extends AppCompatActivity {
 
     private void post_area(String cityID) {
 
-        area.clear();
-
         Map<String, String> params = new HashMap<>();
-        params.put("CityID",cityID);
+        params.put("CityID", cityID);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 AREA, new JSONObject(params),
@@ -276,7 +344,7 @@ public class Groups extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
@@ -288,8 +356,9 @@ public class Groups extends AppCompatActivity {
     private void parseArea(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
+                area.clear();
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
-                for (int i=0; i<jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                     area.add(jsonObject1.getString("AreaID"));
                     spinnerAdapter_area.add(jsonObject1.getString("AName"));
@@ -302,155 +371,121 @@ public class Groups extends AppCompatActivity {
         }
     }
 
-    private void post_groupDetails() {
+    private boolean validateData() {
+        name = etName.getText().toString().trim();
+        if (name.length() > 2) {
+            tiName.setErrorEnabled(false);
+        } else {
+            tiName.setErrorEnabled(true);
+            tiName.setError("Please enter proper Name");
+            return false;
+        }
+
+        if (latitude == 0 || longitude == 0) {
+            getLocation();
+        }
+
+        if (address == null) {
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.address_fail), Snackbar.LENGTH_LONG);
+            snackbar.show();
+
+            return false;
+        }
+
+        if (address.equalsIgnoreCase("")) {
+            getAddress();
+        }
+
+        return true;
+    }
+
+    private void post_updateUserDetails() {
 
         Map<String, String> params = new HashMap<>();
-        params.put("AreaID",areaID);
+        params.put("Name", name);
+        params.put("Address", address);
+        params.put("Latitude", String.valueOf(latitude));
+        params.put("Longitude", String.valueOf(longitude));
+        params.put("AreaID", areaID);
+        params.put("VolunteerID", String.valueOf(db.userDao().getVolunteerID()));
+        params.put("VictimID", String.valueOf(db.userDao().getVictimID()));
+
+        db.userDao().updateLatitude(String.valueOf(latitude));
+        db.userDao().updateLongitude(String.valueOf(longitude));
+        db.userDao().updateAreaID(areaID);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                GET_GROUP_DETAILS, new JSONObject(params),
+                UPDATE_PROFILE_DETAILS, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        parseGroups(response);
+                        parseResponse();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         });
 
-        jsonObjReq.setTag("GroupDetails");
+        jsonObjReq.setTag("UpdateDetails");
         requestQueue.add(jsonObjReq);
     }
 
-    private void parseGroups(JSONObject jsonObject) {
-        try {
-            if (jsonObject.getBoolean("isSuccess")) {
-                JSONArray jsonArray = jsonObject.getJSONArray("data");
-                for (int i=0; i<jsonArray.length(); i++) {
-                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                    addData(jsonObject1);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    private void parseResponse() {
+        finish();
     }
 
-    private void addData(JSONObject jsonObject1) {
-        GroupDetailsModel groupDetailsModel = new GroupDetailsModel();
-        try {
-            groupDetailsModel.setGroupsID(jsonObject1.getInt("GroupsID"));
-            groupDetailsModel.setVolunteerID(jsonObject1.getInt("VolunteerID"));
-            groupDetailsModel.setAreaID(jsonObject1.getInt("AreaID"));
-            groupDetailsModel.setName(jsonObject1.getString("Name"));
-            groupDetailsModel.setDescription(jsonObject1.getString("Description"));
-            groupDetailsModel.setMembers(jsonObject1.getString("Members"));
-            groupDetailsModel.setLink(jsonObject1.getString("link"));
-            groupDetailsModel.setCreatedOn(UTCToIST(jsonObject1.getString("createdOn")));
-            groupDetailsModel.setUpdatedOn(UTCToIST(jsonObject1.getString("updatedOn")));
-            groupDetailsModel.setIsCompleted(jsonObject1.getInt("isCompleted"));
-            groupDetailsModel.setIsActive(jsonObject1.getInt("isActive"));
-            groupDetailsModel.setLatitude(jsonObject1.getString("latitude"));
-            groupDetailsModel.setLongitude(jsonObject1.getString("longitude"));
-            groupDetailsModel.setDistance(
-                    getDistance(Double.parseDouble(db.userDao().getLatitude()),Double.parseDouble(db.userDao().getLongitude()),
-                            Double.parseDouble(groupDetailsModel.getLatitude()),Double.parseDouble(groupDetailsModel.getLongitude())) + " KM"
-            );
-            mRecyclerViewItems.add(groupDetailsModel);
-            setRecyclerView();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getDistance(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1))
-                * Math.sin(deg2rad(lat2))
-                + Math.cos(deg2rad(lat1))
-                * Math.cos(deg2rad(lat2))
-                * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        dist = dist / 0.62137;
-
-        return String.format(Locale.getDefault(), "%.1f", dist);
-    }
-
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }
-
-    private class GroupsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-        private final List<Object> mRecyclerViewItems_adapter;
-
-        GroupsAdapter(List<Object> mRecyclerViewItem){
-            this.mRecyclerViewItems_adapter = mRecyclerViewItem;
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view;
-            view = LayoutInflater.from(Groups.this).inflate(R.layout.custom_group_details, parent, false);
-            return new GroupViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof GroupViewHolder) {
-                GroupViewHolder groupViewHolder = (GroupViewHolder) holder;
-                final GroupDetailsModel groupDetailsModel = (GroupDetailsModel) mRecyclerViewItems_adapter.get(position);
-
-                String members = "Members - " + groupDetailsModel.getMembers();
-                String distance = "Distance - " + groupDetailsModel.getDistance();
-
-                groupViewHolder.tvName.setText(groupDetailsModel.getName());
-                groupViewHolder.tvDescription.setText(groupDetailsModel.getDescription());
-                groupViewHolder.tvDate.setText(groupDetailsModel.getCreatedOn());
-                groupViewHolder.tvDistance.setText(distance);
-                groupViewHolder.tvMembers.setText(members);
-
-                groupViewHolder.btOpen.setOnClickListener(new View.OnClickListener() {
+    //Location
+    private void getLocation() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(groupDetailsModel.getLink()));
-                        startActivity(i);
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations, this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                        }
                     }
                 });
-            }
+    }
+
+    private void getAddress() {
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//            String city = addresses.get(0).getLocality();
+//            String state = addresses.get(0).getAdminArea();
+//            String country = addresses.get(0).getCountryName();
+//            String postalCode = addresses.get(0).getPostalCode();
+//            String knownName = addresses.get(0).getFeatureName();
+            String setAddress = "Address - " + address;
+            tvAddress.setText(setAddress);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
-        private class GroupViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        getLocation();
+    }
 
-            private TextView tvName, tvDescription, tvDate, tvDistance, tvMembers;
-            private MaterialButton btOpen;
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d("LynkHack", "error 1 : " + i);
+    }
 
-            GroupViewHolder(View itemView) {
-                super(itemView);
-                tvName = itemView.findViewById(R.id.tvName);
-                tvDescription = itemView.findViewById(R.id.tvDescription);
-                tvDate = itemView.findViewById(R.id.tvDate);
-                tvDistance = itemView.findViewById(R.id.tvDistance);
-                tvMembers = itemView.findViewById(R.id.tvMembers);
-                btOpen = itemView.findViewById(R.id.btOpen);
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return mRecyclerViewItems_adapter.size();
-        }
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("LynkHack", "error 2 : " + connectionResult.getErrorMessage());
     }
 }

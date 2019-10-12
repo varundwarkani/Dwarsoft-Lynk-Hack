@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Authentication.Authentication;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
@@ -40,6 +41,8 @@ import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Permissions.checkF
 public class HomeScreen extends AppCompatActivity {
 
     private MaterialButton btV, btOrganization;
+    private ImageView ivTwitter;
+
     private SharedPreferences sharedPreferences;
 
     private AppDatabase db;
@@ -68,6 +71,7 @@ public class HomeScreen extends AppCompatActivity {
     private void init() {
         btV = findViewById(R.id.btV);
         btOrganization = findViewById(R.id.btOrganization);
+        ivTwitter = findViewById(R.id.ivTwitter);
 
         db = AppDatabase.getAppDatabase(getApplicationContext());
         sharedPreferences = getSharedPreferences(SHAREDPREF, MODE_PRIVATE);
@@ -103,6 +107,14 @@ public class HomeScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        ivTwitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeScreen.this, TwitterView.class);
+                startActivity(intent);
             }
         });
     }

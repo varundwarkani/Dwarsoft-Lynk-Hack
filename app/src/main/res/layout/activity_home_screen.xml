@@ -20,17 +20,40 @@
         android:layout_marginBottom="20dp"
         android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/tvtopheader"
+    <LinearLayout
+        android:id="@+id/llTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/disaster_management"
+        android:weightSum="10"
         android:layout_marginTop="50dp"
-        android:layout_alignParentTop="true"
-        android:textAlignment="center"
-        android:textColor="#828282"
-        android:textSize="20sp" />
+        android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tvtopheader"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="6.5"
+            android:gravity="center"
+            android:text="@string/disaster_management"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/ivTwitter"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="2"
+            android:padding="5dp"
+            android:src="@drawable/ic_twitter" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/ima"
@@ -42,7 +65,7 @@
         android:textAlignment="center"
         android:textColor="#C0C0C0"
         android:textSize="25sp"
-        android:layout_below="@+id/tvtopheader" />
+        android:layout_below="@+id/llTop" />
 
     <ImageView
         android:id="@+id/imgvictim"
@@ -53,7 +76,8 @@
         android:layout_above="@+id/imgorg"
         android:layout_marginBottom="40dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/victim" />
+        android:src="@drawable/victim"
+        tools:ignore="RtlSymmetry" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"

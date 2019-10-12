@@ -15,9 +15,8 @@
     <string name="group_created_success">Group Created Successfully!</string>
     <string name="share_resources_success">Resource Shared Successfully!</string>
     <string name="address_fail">Please Select Address</string>
-    <string name="volunteer_details">Volunteer Details</string>
     <string name="name">Name</string>
-    <string name="click_to_set_address">Click To Set Address</string>
+    <string name="click_to_set_address">Click To Set Current Address</string>
     <string name="groups">Groups</string>
     <string name="search_for_groups">Search For Groups</string>
     <string name="create_a_group">Create A Group</string>
@@ -47,4 +46,14 @@
     <string name="help_type">Help Type -</string>
     <string name="request">Request</string>
     <string name="describe_your_request">Describe Your Request?</string>
+    <string name="social_handle">SOCIAL HANDLE</string>
+    <string name="update_details">Update Details</string>
+    <string name="authentication_details">Authentication Details</string>
+    <string name="update">Update</string>
+    <string name="complete_header">Do You Want To Help?</string>
+    <string name="complete_description">Once you accept, it is not reversible.</string>
+    <string name="complete_header1">Do You Want To Accept?</string>
+    <string name="complete_description1">Once you accept, it is not reversible.</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
 </resources>

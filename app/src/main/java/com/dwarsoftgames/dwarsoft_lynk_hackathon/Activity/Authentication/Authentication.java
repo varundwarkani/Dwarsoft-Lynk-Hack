@@ -115,13 +115,12 @@ public class Authentication extends AppCompatActivity {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
                 db.userDao().updatePhoneNo(phoneNumber);
+                sharedPreferences.edit().putBoolean("user_auth", true).apply();
                 if (jsonObject.getBoolean("isNewUser")) {
                     openAuthDetails();
                 } else {
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
                     JSONObject jsonObject1 = jsonArray.getJSONObject(0);
-
-                    sharedPreferences.edit().putBoolean("user_auth", true).apply();
                     db.userDao().updateVolunteerID(jsonObject1.getInt("VolunteerID"));
                     db.userDao().updateVictimID(jsonObject1.getInt("VictimID"));
                     db.userDao().updateAreaID(jsonObject1.getString("AreaID"));

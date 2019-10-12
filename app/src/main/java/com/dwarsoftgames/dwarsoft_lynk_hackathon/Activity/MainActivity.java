@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Authentication.UpdateProfile;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Victim.VictimDashboard;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer.VolunteerDashboard;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MaterialButton btVolunteer;
     private MaterialButton btVictim;
+    private ImageView ivSettings;
 
     private AppDatabase db;
     private SharedPreferences sharedPreferences;
@@ -71,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         btVictim = findViewById(R.id.btVictim);
         btVolunteer = findViewById(R.id.btVolunteer);
+        ivSettings = findViewById(R.id.ivSettings);
 
         db = AppDatabase.getAppDatabase(getApplicationContext());
         sharedPreferences = getSharedPreferences(SHAREDPREF,MODE_PRIVATE);
@@ -105,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
                 if (checkPermissions()) {
                     checkVolunteer();
                 }
+            }
+        });
+
+        ivSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UpdateProfile.class);
+                startActivity(intent);
             }
         });
     }

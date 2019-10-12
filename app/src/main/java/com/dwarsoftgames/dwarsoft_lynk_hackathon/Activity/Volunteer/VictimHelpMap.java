@@ -1,16 +1,12 @@
 package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -30,10 +26,6 @@ import com.dwarsoftgames.dwarsoft_lynk_hackathon.Models.VictimsHelpModel;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,10 +50,9 @@ import java.util.Map;
 
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AREA;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.CITY;
-import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_HELP_TYPES;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_VICTIM_DETAILS;
-import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPREF;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.STATES;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.UPDATE_VHMAP_ISCOMPLETE;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Utilities.UTCToIST;
 
 public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallback {
@@ -217,9 +208,57 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-
+                showCompleteDialog((Integer) marker.getTag());
             }
         });
+    }
+
+    private void showCompleteDialog(final int VHMapID) {
+        new AlertDialog.Builder(VictimHelpMap.this)
+                .setTitle(getString(R.string.complete_header))
+                .setMessage(getString(R.string.complete_description))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        post_updateIsComplete(String.valueOf(VHMapID));
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    private void post_updateIsComplete(String VHMapID) {
+        Map<String, String> params = new HashMap<>();
+        params.put("VHMapID", VHMapID);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                UPDATE_VHMAP_ISCOMPLETE, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        parseResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
+
+        jsonObjReq.setTag("UpdateIsComplete");
+        requestQueue.add(jsonObjReq);
+    }
+
+    private void parseResponse(JSONObject jsonObject) {
+        try {
+            if (jsonObject.getBoolean("isSuccess")) {
+                post_getVictimDetails();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void post_state() {

@@ -16,7 +16,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".Activity.Victim.VictimHelpResource"></activity>
+        <activity android:name=".Activity.Authentication.UpdateProfile"></activity>
+        <activity android:name=".Activity.TwitterView" />
+        <activity android:name=".Activity.Victim.VictimHelpResource" />
         <activity android:name=".Activity.HomeScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

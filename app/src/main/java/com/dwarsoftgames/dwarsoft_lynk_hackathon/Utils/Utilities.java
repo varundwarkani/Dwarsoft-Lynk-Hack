@@ -1,5 +1,7 @@
 package com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,8 +22,10 @@ public class Utilities {
             SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss", Locale.US);
             sdf.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
             timestamp = utcFormat.parse(dateUTC);
+            assert timestamp != null;
             Date ist = sdf.parse(indianFormat.format(timestamp));
             Calendar cal = Calendar.getInstance();
+            assert ist != null;
             cal.setTime(ist);
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);

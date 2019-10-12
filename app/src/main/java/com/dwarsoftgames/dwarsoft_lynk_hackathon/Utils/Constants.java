@@ -29,4 +29,12 @@ public class Constants {
     public static final String GET_VOLUNTEER_DETAILS = ENDPOINT + "getvolunteerdetails";
 
     public static final String REQUEST_HELP = ENDPOINT + "posthelpvictim";
+
+    public static final String GET_PROFILE_DETAILS = ENDPOINT + "getprofiledetails";
+
+    public static final String UPDATE_PROFILE_DETAILS = ENDPOINT + "updateprofile";
+
+    public static final String UPDATE_VHMAP_ISCOMPLETE = ENDPOINT + "iscompletevictim";
+
+    public static final String UPDATE_VRMAP_ISCOMPLETE = ENDPOINT + "iscompletevolunteer";
 }

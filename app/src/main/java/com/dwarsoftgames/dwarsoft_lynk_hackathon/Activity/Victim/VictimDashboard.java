@@ -1,7 +1,9 @@
 package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Victim;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -52,6 +54,7 @@ import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AREA;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.CITY;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_VOLUNTEER_DETAILS;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.STATES;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.UPDATE_VRMAP_ISCOMPLETE;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Utilities.UTCToIST;
 
 public class VictimDashboard extends AppCompatActivity implements OnMapReadyCallback {
@@ -220,9 +223,57 @@ public class VictimDashboard extends AppCompatActivity implements OnMapReadyCall
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-
+                showCompleteDialog((Integer) marker.getTag());
             }
         });
+    }
+
+    private void showCompleteDialog(final int VRMapID) {
+        new AlertDialog.Builder(VictimDashboard.this)
+                .setTitle(getString(R.string.complete_header1))
+                .setMessage(getString(R.string.complete_description1))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        post_updateIsComplete(String.valueOf(VRMapID));
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    private void post_updateIsComplete(String VRMapID) {
+        Map<String, String> params = new HashMap<>();
+        params.put("VRMapID", VRMapID);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                UPDATE_VRMAP_ISCOMPLETE, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        parseResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
+
+        jsonObjReq.setTag("UpdateIsComplete");
+        requestQueue.add(jsonObjReq);
+    }
+
+    private void parseResponse(JSONObject jsonObject) {
+        try {
+            if (jsonObject.getBoolean("isSuccess")) {
+                post_getVolunteerDetails();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void post_state() {

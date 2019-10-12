@@ -63,7 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="States"
+            android:text="State - "
             android:gravity="center"
             android:textColor="@color/black" />
 
@@ -95,7 +95,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="City"
+            android:text="City - "
             android:gravity="center"
             android:textColor="@color/black" />
 
@@ -127,7 +127,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="Area"
+            android:text="Area - "
             android:gravity="center"
             android:textColor="@color/black" />
 

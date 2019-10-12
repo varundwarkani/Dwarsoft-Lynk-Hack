@@ -26,7 +26,7 @@
         android:id="@+id/tvtopheader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome"
+        android:text="@string/welcome"
         android:layout_marginTop="50dp"
         android:layout_alignParentTop="true"
         android:textAlignment="center"
@@ -93,7 +93,7 @@
         android:id="@+id/imgorg"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
         android:padding="10dp"
         android:layout_centerVertical="true"
         android:src="@drawable/team"
@@ -105,10 +105,9 @@
         android:id="@+id/btGroups"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
-        android:layout_toRightOf="@+id/imgorg"
+        android:layout_toEndOf="@+id/imgorg"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-
         android:layout_below="@+id/btResources"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -119,5 +118,34 @@
         android:layout_marginTop="30dp"
         android:text="Groups" />
 
+    <ImageView
+        android:id="@+id/imgnew"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingStart="10dp"
+        android:padding="10dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_posts"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/imgorg"
+        tools:ignore="RtlSymmetry" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/btPosts"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/white"
+        android:layout_toEndOf="@+id/imgnew"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/btGroups"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:backgroundTint="@color/green"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:cornerRadius="5dp"
+        android:layout_marginTop="30dp"
+        android:text="My Posts" />
 
 </RelativeLayout>

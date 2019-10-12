@@ -49,9 +49,11 @@ import java.util.List;
 import java.util.Map;
 
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AREA;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AUTH_KEY;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.CITY;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_VICTIM_DETAILS;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.STATES;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.TEXT_SMS;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.UPDATE_VHMAP_ISCOMPLETE;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Utilities.UTCToIST;
 
@@ -76,6 +78,8 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
 
     private GoogleMap mMap;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    private String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +212,18 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                showCompleteDialog((Integer) marker.getTag());
+
+                int VHMapID = (Integer) marker.getTag();
+
+                for (int i = 0; i < itemsList.size(); i++) {
+                    VictimsHelpModel victimsHelpModel = (VictimsHelpModel) itemsList.get(i);
+                    if (victimsHelpModel.getVHMapID() == VHMapID) {
+                        phoneNumber = victimsHelpModel.getPhoneNo();
+                        break;
+                    }
+                }
+
+                showCompleteDialog(VHMapID);
             }
         });
     }
@@ -221,11 +236,40 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
                 .setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        post_updateIsComplete(String.valueOf(VHMapID));
+                        sendSMS();
+//                        post_updateIsComplete(String.valueOf(VHMapID));
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), null)
                 .show();
+    }
+
+    private void sendSMS() {
+        //Adding the method to the queue by calling the method getDataFromServer
+        requestQueue.add(getData());
+    }
+
+    private JsonObjectRequest getData() {
+
+        String message = "Hi, Someone has requested to help you. Contact - " + db.userDao().getPhoneNumber();
+
+        String url = TEXT_SMS + phoneNumber + AUTH_KEY + message;
+
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.message_sent), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.message_sent), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
+        return jsonObjectRequest;
     }
 
     private void post_updateIsComplete(String VHMapID) {

@@ -12,8 +12,10 @@
     <string name="sign_in">Sign In</string>
     <string name="help_someone">Help Someone</string>
     <string name="api_fail">Server Error</string>
+    <string name="message_sent">Message Sent</string>
     <string name="group_created_success">Group Created Successfully!</string>
     <string name="share_resources_success">Resource Shared Successfully!</string>
+    <string name="success">Success</string>
     <string name="address_fail">Please Select Address</string>
     <string name="name">Name</string>
     <string name="click_to_set_address">Click To Set Current Address</string>
@@ -54,6 +56,10 @@
     <string name="complete_description">Once you accept, it is not reversible.</string>
     <string name="complete_header1">Do You Want To Accept?</string>
     <string name="complete_description1">Once you accept, it is not reversible.</string>
+    <string name="close_help">Are you sure you want to close?</string>
     <string name="accept">Accept</string>
     <string name="cancel">Cancel</string>
+    <string name="welcome">Welcome</string>
+    <string name="my_posts">My Posts</string>
+    <string name="completed_ques">Completed?</string>
 </resources>

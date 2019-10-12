@@ -14,7 +14,7 @@ import com.google.android.material.button.MaterialButton;
 
 public class VolunteerDashboard extends AppCompatActivity {
 
-    private MaterialButton btHelp, btResources, btGroups;
+    private MaterialButton btHelp, btResources, btGroups, btPosts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ public class VolunteerDashboard extends AppCompatActivity {
         btHelp = findViewById(R.id.btHelp);
         btResources = findViewById(R.id.btResources);
         btGroups = findViewById(R.id.btGroups);
+        btPosts = findViewById(R.id.btPosts);
     }
 
     private void setOnClicks() {
@@ -61,6 +62,14 @@ public class VolunteerDashboard extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VolunteerDashboard.this, Groups.class);
+                startActivity(intent);
+            }
+        });
+
+        btPosts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VolunteerDashboard.this, VolunteerPosts.class);
                 startActivity(intent);
             }
         });

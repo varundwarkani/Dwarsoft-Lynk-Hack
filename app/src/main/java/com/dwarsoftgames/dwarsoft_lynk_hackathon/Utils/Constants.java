@@ -37,4 +37,12 @@ public class Constants {
     public static final String UPDATE_VHMAP_ISCOMPLETE = ENDPOINT + "iscompletevictim";
 
     public static final String UPDATE_VRMAP_ISCOMPLETE = ENDPOINT + "iscompletevolunteer";
+
+    public static final String GET_VHMAP = ENDPOINT + "getvictimshelpmap"; //VictimID
+
+    public static final String GET_VRMAP = ENDPOINT + "getvolunteerhelpmap"; //VolunteerID
+
+    public static final String TEXT_SMS = "http://api.msg91.com/api/sendhttp.php?country=91&sender=TESTIN&route=4&mobiles=";
+
+    public static final String AUTH_KEY = "&authkey=235086AuBUHp6g5b8a8abc&message=";
 }

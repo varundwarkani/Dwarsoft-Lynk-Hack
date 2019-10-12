@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Models.VictimsHelpModel;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Models.VolunteerHelpModel;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -51,9 +52,11 @@ import java.util.List;
 import java.util.Map;
 
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AREA;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AUTH_KEY;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.CITY;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_VOLUNTEER_DETAILS;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.STATES;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.TEXT_SMS;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.UPDATE_VRMAP_ISCOMPLETE;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Utilities.UTCToIST;
 
@@ -79,6 +82,8 @@ public class VictimDashboard extends AppCompatActivity implements OnMapReadyCall
 
     private GoogleMap mMap;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    private String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,9 +228,46 @@ public class VictimDashboard extends AppCompatActivity implements OnMapReadyCall
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                showCompleteDialog((Integer) marker.getTag());
+                int VHMapID = (Integer) marker.getTag();
+
+                for (int i = 0; i < itemsList.size(); i++) {
+                    VictimsHelpModel victimsHelpModel = (VictimsHelpModel) itemsList.get(i);
+                    if (victimsHelpModel.getVHMapID() == VHMapID) {
+                        phoneNumber = victimsHelpModel.getPhoneNo();
+                        break;
+                    }
+                }
+                showCompleteDialog(VHMapID);
             }
         });
+    }
+
+    private void sendSMS() {
+        //Adding the method to the queue by calling the method getDataFromServer
+        requestQueue.add(getData());
+    }
+
+    private JsonObjectRequest getData() {
+
+        String message = "Hi, Someone has accepted your help request. Contact - " + db.userDao().getPhoneNumber();
+
+        String url = TEXT_SMS + phoneNumber + AUTH_KEY + message;
+
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.message_sent), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.message_sent), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
+        return jsonObjectRequest;
     }
 
     private void showCompleteDialog(final int VRMapID) {
@@ -236,44 +278,12 @@ public class VictimDashboard extends AppCompatActivity implements OnMapReadyCall
                 .setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        post_updateIsComplete(String.valueOf(VRMapID));
+                        sendSMS();
+//                        post_updateIsComplete(String.valueOf(VRMapID));
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), null)
                 .show();
-    }
-
-    private void post_updateIsComplete(String VRMapID) {
-        Map<String, String> params = new HashMap<>();
-        params.put("VRMapID", VRMapID);
-
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                UPDATE_VRMAP_ISCOMPLETE, new JSONObject(params),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        parseResponse(response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.api_fail), Snackbar.LENGTH_LONG);
-                snackbar.show();
-            }
-        });
-
-        jsonObjReq.setTag("UpdateIsComplete");
-        requestQueue.add(jsonObjReq);
-    }
-
-    private void parseResponse(JSONObject jsonObject) {
-        try {
-            if (jsonObject.getBoolean("isSuccess")) {
-                post_getVolunteerDetails();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     private void post_state() {

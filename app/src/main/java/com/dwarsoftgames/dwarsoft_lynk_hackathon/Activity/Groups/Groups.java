@@ -1,21 +1,20 @@
-package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer;
+package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Groups;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -25,46 +24,37 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Models.GroupDetailsModel;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputLayout;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.AREA;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.CITY;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.GET_GROUP_DETAILS;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPREF;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.STATES;
-import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.VOLUNTEER_INSERT;
+import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Utilities.UTCToIST;
 
-public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class Groups extends AppCompatActivity {
 
-    private TextInputLayout tiName;
-    private EditText etName;
-    private TextView tvAddress;
+    private MaterialButton btCreateGroup;
     private MaterialSpinner spState, spCity, spArea;
-    private MaterialButton btEnter;
+    private RecyclerView recyclerView;
 
     private RequestQueue requestQueue;
     private AppDatabase db;
-    private SharedPreferences sharedPreferences;
 
     private ArrayAdapter<String> spinnerAdapter_state;
     private ArrayAdapter<String> spinnerAdapter_city;
@@ -75,18 +65,13 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
     private ArrayList<String> area = new ArrayList<>();
 
     private String areaID = "1";
-    private String address;
-    private String name;
-    private double latitude;
-    private double longitude;
 
-    //Location
-    private FusedLocationProviderClient mFusedLocationClient;
+    private final List<Object> mRecyclerViewItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_volunteer_auth_details);
+        setContentView(R.layout.activity_groups);
 
         Window window = getWindow();
         // clear FLAG_TRANSLUCENT_STATUS flag:
@@ -97,37 +82,39 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
         window.setStatusBarColor(getResources().getColor(R.color.white));
 
         init();
+        setOnClicks();
         setAdapters();
         setSpinnerListeners();
-        setOnClicks();
-
-        getLocation();
+        setRecyclerView();
 
         post_state();
         post_city("1");
         post_area("1");
+
+        post_groupDetails();
     }
 
     private void init() {
-        tiName = findViewById(R.id.tiName);
-        etName = findViewById(R.id.etName);
-        tvAddress = findViewById(R.id.tvAddress);
+        btCreateGroup = findViewById(R.id.btCreateGroup);
         spState = findViewById(R.id.spState);
         spCity = findViewById(R.id.spCity);
         spArea = findViewById(R.id.spArea);
-        btEnter = findViewById(R.id.btEnter);
+        recyclerView = findViewById(R.id.recyclerView);
 
         requestQueue = Volley.newRequestQueue(getApplicationContext(),null);
         db = AppDatabase.getAppDatabase(getApplicationContext());
-        sharedPreferences = getSharedPreferences(SHAREDPREF,MODE_PRIVATE);
 
-        spState.setHint("Select State");
-        spCity.setHint("Select City");
-        spArea.setHint("Select Area");
+        mRecyclerViewItems.clear();
+    }
 
-        states.clear();
-        city.clear();
-        area.clear();
+    private void setOnClicks() {
+        btCreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Groups.this,CreateGroup.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setAdapters() {
@@ -160,26 +147,16 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 areaID = area.get(position);
+                post_groupDetails();
             }
         });
     }
 
-    private void setOnClicks() {
-        btEnter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateData()) {
-                    post_authDetails();
-                }
-            }
-        });
-
-        tvAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getAddress();
-            }
-        });
+    private void setRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,1));
+        GroupsAdapter groupsAdapter = new GroupsAdapter(mRecyclerViewItems);
+        recyclerView.setAdapter(groupsAdapter);
     }
 
     private void post_state() {
@@ -307,53 +284,17 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
         }
     }
 
-    private boolean validateData() {
-        name = etName.getText().toString().trim();
-        if (name.length() > 2) {
-            tiName.setErrorEnabled(false);
-        } else {
-            tiName.setErrorEnabled(true);
-            tiName.setError("Please enter proper Name");
-            return false;
-        }
-
-        if (latitude == 0 || longitude == 0) {
-            getLocation();
-        }
-
-        if (address == null) {
-            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.address_fail), Snackbar.LENGTH_LONG);
-            snackbar.show();
-
-            return false;
-        }
-
-        if (address.equalsIgnoreCase("")) {
-            getAddress();
-        }
-
-        return true;
-    }
-
-    private void post_authDetails() {
+    private void post_groupDetails() {
 
         Map<String, String> params = new HashMap<>();
-        params.put("phoneNo",db.userDao().getPhoneNumber());
-        params.put("Name",name);
-        params.put("Address",address);
-        params.put("Latitude", String.valueOf(latitude));
-        params.put("Longitude", String.valueOf(longitude));
         params.put("AreaID",areaID);
 
-        db.userDao().updateLatitude(String.valueOf(latitude));
-        db.userDao().updateLongitude(String.valueOf(longitude));
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                VOLUNTEER_INSERT, new JSONObject(params),
+                GET_GROUP_DETAILS, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        parseResponse(response);
+                        parseGroups(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -363,85 +304,120 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
             }
         });
 
-        jsonObjReq.setTag("VolunteerAuthDetails");
+        jsonObjReq.setTag("GroupDetails");
         requestQueue.add(jsonObjReq);
     }
 
-    private void parseResponse(JSONObject jsonObject) {
-
+    private void parseGroups(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
-                sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
-                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                successfulResponse(jsonObject1.getInt("insertId"));
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                for (int i=0; i<jsonArray.length(); i++) {
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    addData(jsonObject1);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void successfulResponse(int VolunteerID) {
-        sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
-        db.userDao().updateVolunteerID(VolunteerID);
-
-        openDashboard();
-    }
-
-    private void openDashboard() {
-        Intent intent = new Intent(VolunteerAuthDetails.this, VolunteerDashboard.class);
-        startActivity(intent);
-        finish();
-    }
-
-    //Location
-    private void getLocation() {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations, this can be null.
-                        if (location != null) {
-                            // Logic to handle location object
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        }
-                    }
-                });
-    }
-
-    private void getAddress() {
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
-
+    private void addData(JSONObject jsonObject1) {
+        GroupDetailsModel groupDetailsModel = new GroupDetailsModel();
         try {
-            addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//            String city = addresses.get(0).getLocality();
-//            String state = addresses.get(0).getAdminArea();
-//            String country = addresses.get(0).getCountryName();
-//            String postalCode = addresses.get(0).getPostalCode();
-//            String knownName = addresses.get(0).getFeatureName();
-            String setAddress = "Address - " + address;
-            tvAddress.setText(setAddress);
-        } catch (IOException e) {
+            groupDetailsModel.setGroupsID(jsonObject1.getInt("GroupsID"));
+            groupDetailsModel.setVolunteerID(jsonObject1.getInt("VolunteerID"));
+            groupDetailsModel.setAreaID(jsonObject1.getInt("AreaID"));
+            groupDetailsModel.setName(jsonObject1.getString("Name"));
+            groupDetailsModel.setDescription(jsonObject1.getString("Description"));
+            groupDetailsModel.setMembers(jsonObject1.getString("Members"));
+            groupDetailsModel.setLink(jsonObject1.getString("link"));
+            groupDetailsModel.setCreatedOn(UTCToIST(jsonObject1.getString("createdOn")));
+            groupDetailsModel.setUpdatedOn(UTCToIST(jsonObject1.getString("updatedOn")));
+            groupDetailsModel.setIsCompleted(jsonObject1.getInt("isCompleted"));
+            groupDetailsModel.setIsActive(jsonObject1.getInt("isActive"));
+            groupDetailsModel.setLatitude(jsonObject1.getString("latitude"));
+            groupDetailsModel.setLongitude(jsonObject1.getString("longitude"));
+            groupDetailsModel.setDistance(
+                    getDistance(Double.parseDouble(db.userDao().getLatitude()),Double.parseDouble(db.userDao().getLongitude()),
+                            Double.parseDouble(groupDetailsModel.getLatitude()),Double.parseDouble(groupDetailsModel.getLongitude())) + " KM"
+            );
+            mRecyclerViewItems.add(groupDetailsModel);
+            setRecyclerView();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        getLocation();
+    private String getDistance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        dist = dist / 0.62137;
+        return String.valueOf((dist));
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d("LynkHack","error 1 : "+i);
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d("LynkHack","error 2 : "+connectionResult.getErrorMessage());
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
+
+    private class GroupsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private final List<Object> mRecyclerViewItems_adapter;
+
+        GroupsAdapter(List<Object> mRecyclerViewItem){
+            this.mRecyclerViewItems_adapter = mRecyclerViewItem;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view;
+            view = LayoutInflater.from(Groups.this).inflate(R.layout.custom_group_details, parent, false);
+            return new GroupViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof GroupViewHolder) {
+                GroupViewHolder groupViewHolder = (GroupViewHolder) holder;
+                GroupDetailsModel groupDetailsModel = (GroupDetailsModel) mRecyclerViewItems_adapter.get(position);
+
+                groupViewHolder.tvName.setText(groupDetailsModel.getName());
+                groupViewHolder.tvDescription.setText(groupDetailsModel.getDescription());
+                groupViewHolder.tvDate.setText(groupDetailsModel.getCreatedOn());
+                groupViewHolder.tvDistance.setText(groupDetailsModel.getDistance());
+                groupViewHolder.tvMembers.setText(groupDetailsModel.getMembers());
+            }
+        }
+
+        private class GroupViewHolder extends RecyclerView.ViewHolder {
+
+            private TextView tvName, tvDescription, tvDate, tvDistance, tvMembers;
+
+            GroupViewHolder(View itemView) {
+                super(itemView);
+                tvName = itemView.findViewById(R.id.tvName);
+                tvDescription = itemView.findViewById(R.id.tvDescription);
+                tvDate = itemView.findViewById(R.id.tvDate);
+                tvDistance = itemView.findViewById(R.id.tvDistance);
+                tvMembers = itemView.findViewById(R.id.tvMembers);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return mRecyclerViewItems_adapter.size();
+        }
     }
 }

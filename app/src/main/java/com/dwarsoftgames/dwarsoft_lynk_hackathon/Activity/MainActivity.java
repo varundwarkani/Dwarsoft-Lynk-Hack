@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
             user_table.setPhoneNo("");
             user_table.setVictim_id(0);
             user_table.setVolunteer_id(0);
+            user_table.setLatitude("");
+            user_table.setLongitude("");
             db.userDao().insertAll(user_table);
         }
     }

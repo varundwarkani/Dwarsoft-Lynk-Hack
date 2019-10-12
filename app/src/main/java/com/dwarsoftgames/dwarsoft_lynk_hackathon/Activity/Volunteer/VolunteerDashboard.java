@@ -2,13 +2,19 @@ package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Groups.Groups;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
+import com.google.android.material.button.MaterialButton;
 
 public class VolunteerDashboard extends AppCompatActivity {
+
+    private MaterialButton btHelp, btResources, btGroups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +28,39 @@ public class VolunteerDashboard extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         // finally change the color
         window.setStatusBarColor(getResources().getColor(R.color.white));
+
+        init();
+        setOnClicks();
+    }
+
+    private void init() {
+        btHelp = findViewById(R.id.btHelp);
+        btResources = findViewById(R.id.btResources);
+        btGroups = findViewById(R.id.btGroups);
+    }
+
+    private void setOnClicks() {
+
+        btHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btResources.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btGroups.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VolunteerDashboard.this, Groups.class);
+                startActivity(intent);
+            }
+        });
     }
 }

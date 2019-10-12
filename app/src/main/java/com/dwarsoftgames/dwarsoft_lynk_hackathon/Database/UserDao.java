@@ -21,11 +21,23 @@ public interface UserDao {
     @Query("SELECT phoneNo FROM user_table WHERE user_id = 1")
     String getPhoneNumber();
 
+    @Query("SELECT latitude FROM user_table WHERE user_id = 1")
+    String getLatitude();
+
+    @Query("SELECT longitude FROM user_table WHERE user_id = 1")
+    String getLongitude();
+
     @Query("UPDATE user_table SET volunteer_id = :volunteerID WHERE user_id = 1")
     void updateVolunteerID(int volunteerID);
 
     @Query("UPDATE user_table SET phoneNo = :phoneNo WHERE user_id = 1")
     void updatePhoneNo(String phoneNo);
+
+    @Query("UPDATE user_table SET latitude = :latitude WHERE user_id = 1")
+    void updateLatitude(String latitude);
+
+    @Query("UPDATE user_table SET longitude = :longitude WHERE user_id = 1")
+    void updateLongitude(String longitude);
 
     @Insert
     void insertAll(user_table... user_tables);

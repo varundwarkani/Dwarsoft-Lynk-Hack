@@ -13,10 +13,12 @@
     <string name="enter">Enter</string>
     <string name="help_someone">Help Someone</string>
     <string name="share_resources">Share Resources</string>
-    <string name="groups">Groups</string>
     <string name="api_fail">Server Error</string>
     <string name="address_fail">Please Select Address</string>
     <string name="volunteer_details">Volunteer Details</string>
     <string name="name">Name</string>
     <string name="click_to_set_address">Click To Set Address</string>
+    <string name="groups">Groups</string>
+    <string name="create_group">Create Group</string>
+    <string name="search_for_groups">Search For Groups</string>
 </resources>

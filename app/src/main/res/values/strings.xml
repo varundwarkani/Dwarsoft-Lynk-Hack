@@ -28,4 +28,5 @@
     <string name="number_of_members_allowed">Number Of Members Allowed</string>
     <string name="group_link">Group Link</string>
     <string name="create_group">Create Group</string>
+    <string name="join_group">JOIN GROUP</string>
 </resources>

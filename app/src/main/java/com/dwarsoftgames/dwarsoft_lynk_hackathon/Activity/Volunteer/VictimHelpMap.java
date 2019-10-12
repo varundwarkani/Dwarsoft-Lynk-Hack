@@ -144,10 +144,22 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
         spinnerAdapter_area.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
+    private void clearAdapters() {
+        spinnerAdapter_city = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
+        spinnerAdapter_city.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerAdapter_area = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
+        spinnerAdapter_area.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spCity.setAdapter(spinnerAdapter_city);
+        spArea.setAdapter(spinnerAdapter_area);
+    }
+
     private void setSpinnerListeners() {
         spState.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                clearAdapters();
                 post_city(states.get(position));
             }
         });

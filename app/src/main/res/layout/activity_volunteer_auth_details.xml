@@ -52,47 +52,101 @@
         app:layout_constraintEnd_toEndOf="@+id/endGuideline"
         app:layout_constraintTop_toBottomOf="@+id/tiName" />
 
-    <com.jaredrummler.materialspinner.MaterialSpinner
-        android:id="@+id/spState"
+    <LinearLayout
+        android:id="@+id/llStates"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:textStyle="bold"
-        app:ms_background_color="@color/white"
-        app:ms_arrow_tint="@color/black"
-        app:ms_text_color="@color/black"
-        app:ms_hint_color="@color/black"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintEnd_toEndOf="@+id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddress"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvAddress">
 
-    <com.jaredrummler.materialspinner.MaterialSpinner
-        android:id="@+id/spCity"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:textStyle="bold"
-        app:ms_background_color="@color/white"
-        app:ms_arrow_tint="@color/black"
-        app:ms_text_color="@color/black"
-        app:ms_hint_color="@color/black"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@+id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@+id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/spState"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="States"
+            android:gravity="center"
+            android:textColor="@color/black" />
 
-    <com.jaredrummler.materialspinner.MaterialSpinner
-        android:id="@+id/spArea"
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/spState"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="50dp"
+            android:textStyle="bold"
+            app:ms_background_color="@color/white"
+            app:ms_arrow_tint="@color/black"
+            app:ms_text_color="@color/black"
+            app:ms_hint_color="@color/black"
+            android:layout_marginTop="5dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llCity"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:textStyle="bold"
-        app:ms_background_color="@color/white"
-        app:ms_arrow_tint="@color/black"
-        app:ms_text_color="@color/black"
-        app:ms_hint_color="@color/black"
-        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintEnd_toEndOf="@+id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/spCity"/>
+        app:layout_constraintTop_toBottomOf="@+id/llStates">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="City"
+            android:gravity="center"
+            android:textColor="@color/black" />
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/spCity"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="50dp"
+            android:textStyle="bold"
+            app:ms_background_color="@color/white"
+            app:ms_arrow_tint="@color/black"
+            app:ms_text_color="@color/black"
+            app:ms_hint_color="@color/black"
+            android:layout_marginTop="5dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llArea"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        app:layout_constraintStart_toStartOf="@+id/startGuideline"
+        app:layout_constraintEnd_toEndOf="@+id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/llCity">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="Area"
+            android:gravity="center"
+            android:textColor="@color/black" />
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/spArea"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="50dp"
+            android:textStyle="bold"
+            app:ms_background_color="@color/white"
+            app:ms_arrow_tint="@color/black"
+            app:ms_text_color="@color/black"
+            app:ms_hint_color="@color/black"
+            android:layout_marginTop="5dp" />
+
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
@@ -109,7 +163,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="@id/startGuideline1"
         app:layout_constraintEnd_toEndOf="@id/endGuideline1"
-        app:layout_constraintTop_toBottomOf="@id/spArea"/>
+        app:layout_constraintTop_toBottomOf="@id/llArea"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"

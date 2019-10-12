@@ -347,6 +347,7 @@ public class VolunteerAuthDetails extends AppCompatActivity implements GoogleApi
 
         db.userDao().updateLatitude(String.valueOf(latitude));
         db.userDao().updateLongitude(String.valueOf(longitude));
+        db.userDao().updateAreaID(areaID);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 VOLUNTEER_INSERT, new JSONObject(params),

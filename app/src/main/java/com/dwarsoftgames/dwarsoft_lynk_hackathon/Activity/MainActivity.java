@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +16,9 @@ import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer.VolunteerDas
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.user_table;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPREF;
@@ -29,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
     private AppDatabase db;
     private SharedPreferences sharedPreferences;
+
+    //Location
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Double latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +89,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkPermissions() {
-        return checkCoarseLocation(MainActivity.this) && checkFineLocation(MainActivity.this);
-
+        if (checkCoarseLocation(MainActivity.this) && checkFineLocation(MainActivity.this)) {
+            getLocation();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void checkVolunteer() {
@@ -100,5 +112,26 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
+    }
+
+    //Location
+    private void getLocation() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations, this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                            if (db.userDao().getLatitude().equalsIgnoreCase("") || db.userDao().getLongitude().equalsIgnoreCase("")) {
+                                db.userDao().updateLatitude(String.valueOf(latitude));
+                                db.userDao().updateLongitude(String.valueOf(longitude));
+                            }
+                        }
+                    }
+                });
     }
 }

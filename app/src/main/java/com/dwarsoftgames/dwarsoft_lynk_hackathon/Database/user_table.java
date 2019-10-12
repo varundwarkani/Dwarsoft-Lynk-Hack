@@ -23,10 +23,13 @@ public class user_table {
     private int victim_id = 0;
 
     @ColumnInfo(name = "latitude")
-    private String latitude;
+    private String latitude = "";
 
     @ColumnInfo(name = "longitude")
-    private String longitude;
+    private String longitude = "";
+
+    @ColumnInfo(name = "areaID")
+    private String areaID;
 
     public int getUid() {
         return uid;
@@ -82,5 +85,13 @@ public class user_table {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getAreaID() {
+        return areaID;
+    }
+
+    public void setAreaID(String areaID) {
+        this.areaID = areaID;
     }
 }

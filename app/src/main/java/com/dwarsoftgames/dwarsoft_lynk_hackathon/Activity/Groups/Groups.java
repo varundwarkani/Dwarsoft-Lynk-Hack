@@ -161,6 +161,8 @@ public class Groups extends AppCompatActivity {
 
     private void post_state() {
 
+        states.clear();
+
         Map<String, String> params = new HashMap<>();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
@@ -185,7 +187,6 @@ public class Groups extends AppCompatActivity {
     private void parseStates(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
-                states.clear();
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i=0; i<jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -201,6 +202,8 @@ public class Groups extends AppCompatActivity {
     }
 
     private void post_city(String stateID) {
+
+        city.clear();
 
         Map<String, String> params = new HashMap<>();
         params.put("StateID",stateID);
@@ -227,7 +230,6 @@ public class Groups extends AppCompatActivity {
     private void parseCity(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
-                city.clear();
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i=0; i<jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -243,6 +245,8 @@ public class Groups extends AppCompatActivity {
     }
 
     private void post_area(String cityID) {
+
+        area.clear();
 
         Map<String, String> params = new HashMap<>();
         params.put("CityID",cityID);
@@ -269,7 +273,6 @@ public class Groups extends AppCompatActivity {
     private void parseArea(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
-                area.clear();
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i=0; i<jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);

@@ -27,6 +27,9 @@ public interface UserDao {
     @Query("SELECT longitude FROM user_table WHERE user_id = 1")
     String getLongitude();
 
+    @Query("SELECT areaID FROM user_table WHERE user_id = 1")
+    String getAreaID();
+
     @Query("UPDATE user_table SET volunteer_id = :volunteerID WHERE user_id = 1")
     void updateVolunteerID(int volunteerID);
 
@@ -38,6 +41,9 @@ public interface UserDao {
 
     @Query("UPDATE user_table SET longitude = :longitude WHERE user_id = 1")
     void updateLongitude(String longitude);
+
+    @Query("UPDATE user_table SET areaID = :areaID WHERE user_id = 1")
+    void updateAreaID(String areaID);
 
     @Insert
     void insertAll(user_table... user_tables);

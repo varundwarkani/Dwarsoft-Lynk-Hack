@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -114,28 +113,24 @@ public class VolunteerAuth extends AppCompatActivity {
     private void parseAuth(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
-                sharedPreferences.edit().putString("phoneNo",phoneNumber).apply();
                 db.userDao().updatePhoneNo(phoneNumber);
                 if (jsonObject.getBoolean("isNewUser")) {
                     openAuthDetails();
                 } else {
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
                     JSONObject jsonObject1 = jsonArray.getJSONObject(0);
-                    successfulResponse(jsonObject1.getInt("VolunteerID"));
+
+                    sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
+                    db.userDao().updateVolunteerID(jsonObject1.getInt("VolunteerID"));
+                    db.userDao().updateAreaID(jsonObject1.getString("AreaID"));
+
+                    openDashboard();
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-    private void successfulResponse(int VolunteerID) {
-        sharedPreferences.edit().putBoolean("volunteerDetails",true).apply();
-        db.userDao().updateVolunteerID(VolunteerID);
-
-        openDashboard();
-    }
-
     private void openAuthDetails() {
         sharedPreferences.edit().putBoolean("volunteerDetails",false).apply();
 

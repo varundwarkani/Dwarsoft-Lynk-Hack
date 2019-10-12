@@ -14,11 +14,18 @@
     <string name="help_someone">Help Someone</string>
     <string name="share_resources">Share Resources</string>
     <string name="api_fail">Server Error</string>
+    <string name="group_created_success">Group Created Successfully!</string>
     <string name="address_fail">Please Select Address</string>
     <string name="volunteer_details">Volunteer Details</string>
     <string name="name">Name</string>
     <string name="click_to_set_address">Click To Set Address</string>
     <string name="groups">Groups</string>
-    <string name="create_group">Create Group</string>
     <string name="search_for_groups">Search For Groups</string>
+    <string name="create_a_group">Create A Group</string>
+    <string name="note_add_whatsapp_telegram_group_link">Note - Add WhatsApp/Telegram Group Link</string>
+    <string name="group_motive">Group Motive</string>
+    <string name="group_name">Group Name</string>
+    <string name="number_of_members_allowed">Number Of Members Allowed</string>
+    <string name="group_link">Group Link</string>
+    <string name="create_group">Create Group</string>
 </resources>

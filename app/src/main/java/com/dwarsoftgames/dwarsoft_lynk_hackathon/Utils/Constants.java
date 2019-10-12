@@ -17,4 +17,6 @@ public class Constants {
     public static final String AREA = ENDPOINT + "getareas";
 
     public static final String GET_GROUP_DETAILS = ENDPOINT + "getgroupdetails";
+
+    public static final String CREATE_GROUP = ENDPOINT + "creategroup";
 }

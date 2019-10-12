@@ -15,6 +15,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.SuccessScreen;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer.ShareResources;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
 import com.google.android.material.button.MaterialButton;
@@ -161,8 +163,8 @@ public class CreateGroup extends AppCompatActivity {
     private void parseCreateGroup(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.group_created_success), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                Intent intent = new Intent(CreateGroup.this, SuccessScreen.class);
+                startActivity(intent);
                 finish();
             }
         } catch (JSONException e) {

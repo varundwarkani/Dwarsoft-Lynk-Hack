@@ -2,8 +2,11 @@ package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Volunteer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
@@ -13,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.SuccessScreen;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
 import com.google.android.material.button.MaterialButton;
@@ -51,6 +55,14 @@ public class ShareResources extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_resources);
+
+        Window window = getWindow();
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        // finally change the color
+        window.setStatusBarColor(getResources().getColor(R.color.white));
 
         init();
         setOnClicks();
@@ -177,8 +189,8 @@ public class ShareResources extends AppCompatActivity {
     private void parseResources(JSONObject jsonObject) {
         try {
             if (jsonObject.getBoolean("isSuccess")) {
-                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),getString(R.string.share_resources_success), Snackbar.LENGTH_LONG);
-                snackbar.show();
+                Intent intent = new Intent(ShareResources.this, SuccessScreen.class);
+                startActivity(intent);
                 finish();
             }
         } catch (JSONException e) {

@@ -35,4 +35,5 @@
     <string name="gps_title">GPS Required</string>
     <string name="gps_description">GPS is required for better Service. Please enable it.</string>
     <string name="okay">Okay</string>
+    <string name="thank_you_for_submitting_your_help">Thank you!\nYour details has been successfully submitted.</string>
 </resources>

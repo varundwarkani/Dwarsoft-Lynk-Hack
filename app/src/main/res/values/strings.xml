@@ -5,9 +5,9 @@
     <string name="none_enhance">Original</string> <!-- Move no enhance to first and rename -->
     <string name="enhance">Lighten</string>
     <string name="enhance_sharp">Magic Color</string>
-    <string name="i_am_a_victim">I Am A Victim</string>
-    <string name="i_am_a_volunteer">I Am A Volunteer</string>
-    <string name="i_represent_organization">I Represent Organization</string>
+    <string name="i_am_a_victim">Victim</string>
+    <string name="i_am_a_volunteer">Volunteer</string>
+    <string name="i_represent_organization">Organization</string>
     <string name="volunteer_authentication">Volunteer Authentication</string>
     <string name="phone_number">Phone Number</string>
     <string name="enter">Enter</string>

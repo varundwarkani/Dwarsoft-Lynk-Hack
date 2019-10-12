@@ -16,14 +16,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".Activity.Volunteer.ShareResources"></activity>
-        <activity android:name=".Activity.Groups.CreateGroup" />
-        <activity android:name=".Activity.Groups.Groups" />
+        <activity android:name=".Activity.Volunteer.VictimHelpMap"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/maps_key" />
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
+        <activity android:name=".Activity.Volunteer.ShareResources" />
+        <activity android:name=".Activity.Groups.CreateGroup" />
+        <activity android:name=".Activity.Groups.Groups" />
         <activity android:name=".Activity.Volunteer.VolunteerAuthDetails" />
         <activity android:name=".Activity.Volunteer.VolunteerDashboard" />
         <activity android:name=".Activity.Volunteer.VolunteerAuth" />

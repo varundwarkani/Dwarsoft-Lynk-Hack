@@ -437,6 +437,9 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
         itemsList.clear();
 
         Map<String, String> params = new HashMap<>();
+        if (areaID == null || areaID.equalsIgnoreCase("")) {
+            areaID = "1";
+        }
         params.put("AreaID",areaID);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,

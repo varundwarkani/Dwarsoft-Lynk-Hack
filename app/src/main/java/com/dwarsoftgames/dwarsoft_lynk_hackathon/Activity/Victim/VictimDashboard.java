@@ -231,9 +231,9 @@ public class VictimDashboard extends AppCompatActivity implements OnMapReadyCall
                 int VHMapID = (Integer) marker.getTag();
 
                 for (int i = 0; i < itemsList.size(); i++) {
-                    VictimsHelpModel victimsHelpModel = (VictimsHelpModel) itemsList.get(i);
-                    if (victimsHelpModel.getVHMapID() == VHMapID) {
-                        phoneNumber = victimsHelpModel.getPhoneNo();
+                    VolunteerHelpModel volunteerHelpModel = (VolunteerHelpModel) itemsList.get(i);
+                    if (volunteerHelpModel.getVRMapID() == VHMapID) {
+                        phoneNumber = volunteerHelpModel.getPhoneNo();
                         break;
                     }
                 }

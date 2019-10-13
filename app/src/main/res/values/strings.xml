@@ -10,7 +10,6 @@
     <string name="i_represent_organization">Organization</string>
     <string name="phone_number">Phone Number</string>
     <string name="sign_in">Sign In</string>
-    <string name="help_someone">Help Someone</string>
     <string name="api_fail">Server Error</string>
     <string name="message_sent">Message Sent</string>
     <string name="group_created_success">Group Created Successfully!</string>
@@ -35,7 +34,7 @@
     <string name="gps_title">GPS Required</string>
     <string name="gps_description">GPS is required for better Service. Please enable it.</string>
     <string name="okay">Okay</string>
-    <string name="thank_you_for_submitting_your_help">Thank you!\nYour details has been successfully submitted.</string>
+    <string name="thank_you_for_submitting_your_help">Thank you!\nYour details has been submitted successfully.</string>
     <string name="victim_volunteer">Victim / Volunteer</string>
     <string name="i_m_a">I\'m a</string>
     <string name="disaster_management">DISASTER MANAGEMENT</string>
@@ -60,6 +59,24 @@
     <string name="accept">Accept</string>
     <string name="cancel">Cancel</string>
     <string name="welcome">Welcome</string>
-    <string name="my_posts">My Posts</string>
     <string name="completed_ques">Completed?</string>
+    <string name="gst_no">GST No.</string>
+    <string name="motive">Motive</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="live_tracking">Live Tracking</string>
+    <string name="host_events">Host Events</string>
+    <string name="raise_funds">Raise Funds</string>
+    <string name="note_add_donation_link">Note - Add Donation Link</string>
+    <string name="fund_campaign_motive">Fund Campaign Motive</string>
+    <string name="campaign_name">Campaign Name</string>
+    <string name="fund_raising_campaign">Fund Raising Campaign</string>
+    <string name="start_campaign">Start Campaign</string>
+    <string name="sponsor_s_name_optional">Sponsor\'s Name (Optional)</string>
+    <string name="help_someone">Help Someone</string>
+    <string name="my_posts">My Posts</string>
+    <string name="contribute">Contribute</string>
+    <string name="search_for_fund_campaigns">Search For Fund Campaigns</string>
+    <string name="collaborate_with_organizations">Collaborate With Organizations</string>
+    <string name="search_for_organizations">Search For Organizations</string>
+    <string name="contact">Contact</string>
 </resources>

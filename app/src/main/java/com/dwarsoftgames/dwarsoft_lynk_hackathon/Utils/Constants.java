@@ -38,9 +38,19 @@ public class Constants {
 
     public static final String UPDATE_VRMAP_ISCOMPLETE = ENDPOINT + "iscompletevolunteer";
 
-    public static final String GET_VHMAP = ENDPOINT + "getvictimshelpmap"; //VictimID
+//    public static final String GET_VHMAP = ENDPOINT + "getvictimshelpmap"; //VictimID
 
     public static final String GET_VRMAP = ENDPOINT + "getvolunteerhelpmap"; //VolunteerID
+
+    public static final String ORGANIZATION_AUTH = ENDPOINT + "ngoauth";
+
+    public static final String ORGANIZATION_AUTH_DATA = ENDPOINT + "ngoinsert";
+
+    public static final String ORGANIZATION_FUND_CAMPAIGN = ENDPOINT + "ngofundinsert";
+
+    public static final String ORGANIZATION_FUNDS_LIST = ENDPOINT + "getngofunddetails";
+
+    public static final String ORGANIZATION_LIST = ENDPOINT + "getngodetails";
 
     public static final String TEXT_SMS = "http://api.msg91.com/api/sendhttp.php?country=91&sender=TESTIN&route=4&mobiles=";
 

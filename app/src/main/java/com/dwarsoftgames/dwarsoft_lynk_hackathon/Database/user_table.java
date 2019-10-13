@@ -22,6 +22,9 @@ public class user_table {
     @ColumnInfo(name = "victim_id")
     private int victim_id = 0;
 
+    @ColumnInfo(name = "org_id")
+    private int org_id = 0;
+
     @ColumnInfo(name = "latitude")
     private String latitude = "";
 
@@ -69,6 +72,14 @@ public class user_table {
 
     public void setVictim_id(int victim_id) {
         this.victim_id = victim_id;
+    }
+
+    public int getOrg_id() {
+        return org_id;
+    }
+
+    public void setOrg_id(int org_id) {
+        this.org_id = org_id;
     }
 
     public String getLatitude() {

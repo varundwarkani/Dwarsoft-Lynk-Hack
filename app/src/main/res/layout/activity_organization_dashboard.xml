@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Activity.Organization.OrganizationDashboard"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentBottom="true"
+        android:textAlignment="center"
+        android:textColor="#9C9C9C"
+        android:layout_marginBottom="20dp"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/llTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="10"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvtopheader"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:gravity="center"
+            android:text="@string/dashboard"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/ima"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/i_m_a"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        android:textColor="#C0C0C0"
+        android:textSize="25sp"
+        android:layout_below="@+id/llTop" />
+
+    <ImageView
+        android:id="@+id/imgvictim"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingStart="10dp"
+        android:padding="10dp"
+        android:layout_above="@+id/imgorg"
+        android:layout_marginBottom="40dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/victim"
+        tools:ignore="RtlSymmetry" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/btLive"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/white"
+        android:layout_toEndOf="@+id/imgvictim"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:backgroundTint="@color/red"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="30dp"
+        app:cornerRadius="5dp"
+        android:layout_above="@+id/btEvents"
+        android:text="@string/live_tracking" />
+
+    <ImageView
+        android:id="@+id/imgorg"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingStart="10dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/team"
+        tools:ignore="RtlSymmetry" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/btEvents"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginRight="20dp"
+        android:layout_toEndOf="@+id/imgorg"
+        android:backgroundTint="@color/purple"
+        android:textColor="@color/white"
+        android:layout_marginLeft="20dp"
+        android:textSize="20sp"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        app:cornerRadius="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/host_events" />
+
+    <ImageView
+        android:id="@+id/imgdonation"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingStart="10dp"
+        android:src="@drawable/team"
+        android:layout_below="@+id/imgorg"
+        android:layout_marginTop="30dp"
+        tools:ignore="RtlSymmetry" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/btFunds"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginRight="20dp"
+        android:layout_toEndOf="@+id/imgorg"
+        android:backgroundTint="@color/purple"
+        android:textColor="@color/white"
+        android:layout_marginLeft="20dp"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        app:cornerRadius="5dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/btEvents"
+        android:text="@string/raise_funds" />
+
+</RelativeLayout>

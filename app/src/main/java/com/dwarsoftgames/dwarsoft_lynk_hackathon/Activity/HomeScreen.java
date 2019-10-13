@@ -18,6 +18,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Authentication.Authentication;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Organization.OrganizationAuth;
+import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Organization.OrganizationDashboard;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.AppDatabase;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Database.user_table;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
@@ -93,12 +95,14 @@ public class HomeScreen extends AppCompatActivity {
         btV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sharedPreferences.getBoolean("user_auth", false)) {
-                    Intent intent = new Intent(HomeScreen.this, MainActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(HomeScreen.this, Authentication.class);
-                    startActivity(intent);
+                if (checkPermissions()) {
+                    if (sharedPreferences.getBoolean("user_auth", false)) {
+                        Intent intent = new Intent(HomeScreen.this, MainActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(HomeScreen.this, Authentication.class);
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -106,7 +110,15 @@ public class HomeScreen extends AppCompatActivity {
         btOrganization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (checkPermissions()) {
+                    if (sharedPreferences.getBoolean("org_auth", false)) {
+                        Intent intent = new Intent(HomeScreen.this, OrganizationDashboard.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(HomeScreen.this, OrganizationAuth.class);
+                        startActivity(intent);
+                    }
+                }
             }
         });
 

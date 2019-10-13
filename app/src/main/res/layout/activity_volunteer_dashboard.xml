@@ -18,9 +18,7 @@
         android:textAlignment="center"
         android:textColor="#9C9C9C"
         android:layout_marginBottom="20dp"
-        android:textSize="20sp"
-
-        />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvtopheader"
@@ -37,19 +35,20 @@
         android:id="@+id/imgvictim"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
         android:padding="10dp"
-        android:layout_above="@+id/imgVolu"
-        android:layout_marginBottom="40dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/helpsomeone" />
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/tvtopheader"
+        android:src="@drawable/helpsomeone"
+        tools:ignore="RtlSymmetry" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/btHelp"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
-        android:layout_toRightOf="@+id/imgVolu"
+        android:layout_toEndOf="@+id/imgVolu"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:backgroundTint="@color/red"
@@ -57,18 +56,22 @@
         android:textSize="20sp"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="20dp"
         app:cornerRadius="5dp"
-        android:layout_above="@+id/btResources"
-        android:text="Help Someone" />
+        android:layout_below="@+id/tvtopheader"
+        android:text="@string/help_someone" />
 
     <ImageView
         android:id="@+id/imgVolu"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:paddingLeft="10dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/help" />
+        android:paddingStart="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/btHelp"
+        android:src="@drawable/help"
+        tools:ignore="RtlSymmetry" />
+
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/btResources"
@@ -77,17 +80,17 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginRight="20dp"
-        android:layout_toRightOf="@+id/imgVolu"
+        android:layout_toEndOf="@+id/imgVolu"
         android:backgroundTint="@color/purple"
         android:textColor="@color/white"
         android:layout_marginLeft="20dp"
         android:textSize="20sp"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/btHelp"
         android:layout_gravity="center"
         android:textAlignment="center"
         app:cornerRadius="5dp"
         android:layout_marginTop="10dp"
-        android:text="Share Resources" />
+        android:text="@string/share_resources" />
 
     <ImageView
         android:id="@+id/imgorg"
@@ -97,8 +100,10 @@
         android:padding="10dp"
         android:layout_centerVertical="true"
         android:src="@drawable/team"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/imgVolu" />
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/btResources"
+        tools:ignore="RtlSymmetry" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
@@ -115,8 +120,8 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         app:cornerRadius="5dp"
-        android:layout_marginTop="30dp"
-        android:text="Groups" />
+        android:layout_marginTop="10dp"
+        android:text="@string/groups" />
 
     <ImageView
         android:id="@+id/imgnew"
@@ -126,7 +131,7 @@
         android:padding="10dp"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_posts"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/imgorg"
         tools:ignore="RtlSymmetry" />
 
@@ -141,11 +146,71 @@
         android:layout_below="@+id/btGroups"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:backgroundTint="@color/green"
+        android:backgroundTint="@color/yellow"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:cornerRadius="5dp"
-        android:layout_marginTop="30dp"
-        android:text="My Posts" />
+        android:layout_marginTop="10dp"
+        android:text="@string/my_posts" />
+
+    <ImageView
+        android:id="@+id/imgOrg"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingStart="10dp"
+        android:padding="10dp"
+        android:layout_marginStart="5dp"
+        android:src="@drawable/ic_posts"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/btPosts"
+        tools:ignore="RtlSymmetry" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/btOrganization"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/white"
+        android:layout_toEndOf="@+id/imgnew"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/btPosts"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:backgroundTint="@color/red"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:cornerRadius="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/i_represent_organization" />
+
+    <ImageView
+        android:id="@+id/imgFunds"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingStart="10dp"
+        android:padding="10dp"
+        android:layout_marginStart="5dp"
+        android:src="@drawable/ic_posts"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/btOrganization"
+        tools:ignore="RtlSymmetry" />
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/btFunds"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/white"
+        android:layout_toEndOf="@+id/imgnew"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/btOrganization"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:backgroundTint="@color/purple"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:cornerRadius="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/contribute" />
 
 </RelativeLayout>

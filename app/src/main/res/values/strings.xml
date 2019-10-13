@@ -51,9 +51,9 @@
     <string name="update_details">Update Details</string>
     <string name="authentication_details">Authentication Details</string>
     <string name="update">Update</string>
-    <string name="complete_header">Do You Want To Help?</string>
+    <string name="complete_header">Do You Want To Help? Your contact details will be shared with the concerned person.</string>
     <string name="complete_description">Once you accept, it is not reversible.</string>
-    <string name="complete_header1">Do You Want The Help?</string>
+    <string name="complete_header1">Do You Want The Help? Your contact details will be shared with the concerned person.</string>
     <string name="complete_description1">Once you accept, it is not reversible.</string>
     <string name="close_help">Are you sure you want to close?</string>
     <string name="close_complete">Do you want us to delete your entry?</string>
@@ -64,7 +64,7 @@
     <string name="gst_no">GST No.</string>
     <string name="motive">Motive</string>
     <string name="dashboard">Dashboard</string>
-    <string name="live_tracking">Live Tracking</string>
+    <string name="live_tracking">Nearby Victims</string>
     <string name="host_events">Host Events</string>
     <string name="raise_funds">Raise Funds</string>
     <string name="note_add_donation_link">Note - Add Donation Link</string>

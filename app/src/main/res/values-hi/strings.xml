@@ -47,9 +47,9 @@
     <string name="update">Pramaaneekaran</string>
     <string name="complete_header">Kya aapko madat karni hai?</string>
     <string name="complete_description">Ek baar accept karne pe piche nai ja sakte.</string>
-    <string name="complete_header1">Kya aapko madat chaiye?</string>
+    <string name="complete_header1">Kya aapko madat chaiye? Aapka phone number uss insaan se share kiya jayega.</string>
     <string name="complete_description1">Ek baar accept karne pe piche nai ja sakte.</string>
-    <string name="close_help">Kya aap sahi me band karna chahate hai?</string>
+    <string name="close_help">Kya aap sahi me band karna chahate hai? Aapka phone number uss insaan se share kiya jayega.</string>
     <string name="close_complete">Kya aap chahate ho hum ye entry hata de?</string>
     <string name="accept">Manjur hai</string>
     <string name="cancel">Radh kare</string>
@@ -58,7 +58,7 @@
     <string name="gst_no">GST No.</string>
     <string name="motive">Prerana</string>
     <string name="dashboard">Dashboard</string>
-    <string name="live_tracking">Live Tracking</string>
+    <string name="live_tracking">Nearby Peedit</string>
     <string name="host_events">Pratispardha aayojit kare</string>
     <string name="raise_funds">Dhan jutaaye</string>
     <string name="note_add_donation_link">Dhyaan den - Daan ka pata bhariye</string>

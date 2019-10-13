@@ -340,7 +340,7 @@ public class Contribute extends AppCompatActivity {
             fundsModel.setName(jsonObject1.getString("Name"));
             fundsModel.setDescription(jsonObject1.getString("Description"));
             fundsModel.setSponsor(jsonObject1.getString("Sponsor"));
-            fundsModel.setLink(jsonObject1.getString("Description"));
+            fundsModel.setLink(jsonObject1.getString("Link"));
             mRecyclerViewItems.add(fundsModel);
         } catch (JSONException e) {
             e.printStackTrace();

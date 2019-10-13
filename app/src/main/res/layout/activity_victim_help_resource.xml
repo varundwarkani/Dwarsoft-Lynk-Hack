@@ -146,6 +146,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:weightSum="10"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/spinner_border"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintTop_toBottomOf="@id/tiChildren">
@@ -168,7 +170,9 @@
             app:ms_arrow_tint="@color/black"
             app:ms_text_color="@color/black"
             app:ms_hint_color="@color/black"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:padding="2dp"
+            android:layout_marginEnd="2dp" />
 
     </LinearLayout>
 

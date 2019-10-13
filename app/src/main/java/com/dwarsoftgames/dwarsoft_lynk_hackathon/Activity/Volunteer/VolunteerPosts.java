@@ -190,7 +190,7 @@ public class VolunteerPosts extends AppCompatActivity {
 
     private void showCompleteDialog(final int VRMapID) {
         new AlertDialog.Builder(VolunteerPosts.this)
-                .setTitle(getString(R.string.close_help))
+                .setTitle(getString(R.string.close_complete))
                 .setMessage(getString(R.string.complete_description))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.okay), new DialogInterface.OnClickListener() {

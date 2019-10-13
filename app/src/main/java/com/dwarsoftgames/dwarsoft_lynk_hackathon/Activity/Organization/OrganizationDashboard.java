@@ -14,7 +14,8 @@ import com.google.android.material.button.MaterialButton;
 
 public class OrganizationDashboard extends AppCompatActivity {
 
-    private MaterialButton btLive, btEvents, btFunds;
+    private MaterialButton btLive, btFunds;
+    private MaterialButton btLive1, btFunds1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,9 @@ public class OrganizationDashboard extends AppCompatActivity {
 
     private void init() {
         btLive = findViewById(R.id.btLive);
-        btEvents = findViewById(R.id.btEvents);
         btFunds = findViewById(R.id.btFunds);
+        btLive1 = findViewById(R.id.btLive1);
+        btFunds1 = findViewById(R.id.btFunds1);
     }
 
     private void setOnClicks() {
@@ -48,14 +50,23 @@ public class OrganizationDashboard extends AppCompatActivity {
             }
         });
 
-        btEvents.setOnClickListener(new View.OnClickListener() {
+        btFunds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(OrganizationDashboard.this, RaiseFunds.class);
+                startActivity(intent);
             }
         });
 
-        btFunds.setOnClickListener(new View.OnClickListener() {
+        btLive1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(OrganizationDashboard.this, VictimHelpMap.class);
+                startActivity(intent);
+            }
+        });
+
+        btFunds1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OrganizationDashboard.this, RaiseFunds.class);

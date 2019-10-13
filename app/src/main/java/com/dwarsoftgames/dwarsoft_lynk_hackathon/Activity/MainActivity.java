@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MaterialButton btVolunteer;
     private MaterialButton btVictim;
+    private MaterialButton btVolunteer1, btVictim1;
     private ImageView ivSettings;
 
     private AppDatabase db;
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         btVictim = findViewById(R.id.btVictim);
         btVolunteer = findViewById(R.id.btVolunteer);
+        btVictim1 = findViewById(R.id.btVictim1);
+        btVolunteer1 = findViewById(R.id.btVolunteer1);
         ivSettings = findViewById(R.id.ivSettings);
 
         db = AppDatabase.getAppDatabase(getApplicationContext());
@@ -104,6 +107,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btVolunteer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPermissions()) {
+                    checkVolunteer();
+                }
+            }
+        });
+
+        btVictim1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPermissions()) {
+                    checkVictim();
+                }
+            }
+        });
+
+        btVolunteer1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkPermissions()) {

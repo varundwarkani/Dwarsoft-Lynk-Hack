@@ -8,6 +8,17 @@
     tools:context=".Activity.HomeScreen"
     android:background="@color/white">
 
+    <ImageView
+        android:id="@+id/ivTwitter"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:padding="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_twitter" />
+
     <TextView
         android:id="@+id/tvHeader"
         android:layout_width="match_parent"
@@ -20,71 +31,33 @@
         android:layout_marginBottom="20dp"
         android:textSize="20sp" />
 
-    <LinearLayout
-        android:id="@+id/llTop"
+    <TextView
+        android:id="@+id/tvtopheader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="10"
+        android:gravity="center"
         android:layout_marginTop="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/tvtopheader"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="6.5"
-            android:gravity="center"
-            android:text="@string/disaster_management"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/ivTwitter"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="2"
-            android:padding="5dp"
-            android:src="@drawable/ic_twitter" />
-
-    </LinearLayout>
+        android:text="@string/disaster_management"
+        android:textAlignment="center"
+        android:textColor="@color/dark_grey"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/ima"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/i_m_a"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="50dp"
         android:textAlignment="center"
-        android:textColor="#C0C0C0"
-        android:textSize="25sp"
-        android:layout_below="@+id/llTop" />
-
-    <ImageView
-        android:id="@+id/imgvictim"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:paddingStart="10dp"
-        android:padding="10dp"
-        android:layout_above="@+id/imgorg"
-        android:layout_marginBottom="40dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/victim"
-        tools:ignore="RtlSymmetry" />
+        android:textColor="@color/grey"
+        android:textSize="40sp"
+        android:layout_above="@+id/btV" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/btV"
         app:rippleColor="@color/white"
         app:strokeColor="@color/white"
-        android:layout_toEndOf="@+id/imgvictim"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:backgroundTint="@color/red"
@@ -95,16 +68,15 @@
         android:layout_marginBottom="30dp"
         app:cornerRadius="5dp"
         android:layout_above="@+id/btOrganization"
-        android:text="@string/victim_volunteer" />
+        android:text="@string/victim_volunteer"
+        app:icon="@drawable/victim"
+        app:iconSize="50dp" />
 
-    <ImageView
-        android:id="@+id/imgorg"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:paddingStart="10dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/team"
-        tools:ignore="RtlSymmetry" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/viewLine"
+        android:layout_centerVertical="true" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
@@ -114,16 +86,18 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginRight="20dp"
-        android:layout_toEndOf="@+id/imgorg"
         android:backgroundTint="@color/purple"
         android:textColor="@color/white"
         android:layout_marginLeft="20dp"
         android:textSize="20sp"
+        android:layout_below="@+id/viewLine"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:textAlignment="center"
         app:cornerRadius="5dp"
         android:layout_marginTop="10dp"
-        android:text="@string/i_represent_organization" />
+        android:text="@string/i_represent_organization"
+        app:icon="@drawable/team"
+        app:iconSize="50dp" />
 
 </RelativeLayout>

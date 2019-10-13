@@ -44,7 +44,7 @@
     <string name="no_of_males">No. Of Males? (Optional)</string>
     <string name="no_of_females">No. Of Females? (Optional)</string>
     <string name="no_of_children">No. Of Children? (Optional)</string>
-    <string name="help_type">Help Type -</string>
+    <string name="help_type">Help Type </string>
     <string name="request">Request</string>
     <string name="describe_your_request">Describe Your Request?</string>
     <string name="social_handle">SOCIAL HANDLE</string>
@@ -56,6 +56,7 @@
     <string name="complete_header1">Do You Want To Accept?</string>
     <string name="complete_description1">Once you accept, it is not reversible.</string>
     <string name="close_help">Are you sure you want to close?</string>
+    <string name="close_complete">Do you want us to delete your entry?</string>
     <string name="accept">Accept</string>
     <string name="cancel">Cancel</string>
     <string name="welcome">Welcome</string>

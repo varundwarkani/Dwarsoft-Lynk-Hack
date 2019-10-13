@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity.Groups.Groups;
 import com.dwarsoftgames.dwarsoft_lynk_hackathon.R;
@@ -15,6 +16,7 @@ import com.google.android.material.button.MaterialButton;
 public class VolunteerDashboard extends AppCompatActivity {
 
     private MaterialButton btHelp, btResources, btGroups, btPosts, btOrganization, btFunds;
+    private ImageView btHelp1, btResources1, btGroups1, btPosts1, btOrganization1, btFunds1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,13 @@ public class VolunteerDashboard extends AppCompatActivity {
         btPosts = findViewById(R.id.btPosts);
         btOrganization = findViewById(R.id.btOrganization);
         btFunds = findViewById(R.id.btFunds);
+
+        btHelp1 = findViewById(R.id.btHelp1);
+        btResources1 = findViewById(R.id.btResources1);
+        btGroups1 = findViewById(R.id.btGroups1);
+        btPosts1 = findViewById(R.id.btPosts1);
+        btOrganization1 = findViewById(R.id.btOrganization1);
+        btFunds1 = findViewById(R.id.btFunds1);
     }
 
     private void setOnClicks() {
@@ -85,6 +94,55 @@ public class VolunteerDashboard extends AppCompatActivity {
         });
 
         btFunds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VolunteerDashboard.this, Contribute.class);
+                startActivity(intent);
+            }
+        });
+
+
+        btHelp1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VolunteerDashboard.this, VictimHelpMap.class);
+                startActivity(intent);
+            }
+        });
+
+        btResources1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VolunteerDashboard.this, ShareResources.class);
+                startActivity(intent);
+            }
+        });
+
+        btGroups1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VolunteerDashboard.this, Groups.class);
+                startActivity(intent);
+            }
+        });
+
+        btPosts1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VolunteerDashboard.this, VolunteerPosts.class);
+                startActivity(intent);
+            }
+        });
+
+        btOrganization1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VolunteerDashboard.this, OrganizationsList.class);
+                startActivity(intent);
+            }
+        });
+
+        btFunds1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(VolunteerDashboard.this, Contribute.class);

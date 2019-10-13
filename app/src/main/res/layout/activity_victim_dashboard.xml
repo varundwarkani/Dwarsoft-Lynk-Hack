@@ -13,15 +13,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="10"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintEnd_toEndOf="@+id/endGuideline"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/spinner_border">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="State - "
+            android:text="State "
             android:gravity="center"
             android:textColor="@color/black" />
 
@@ -31,11 +33,12 @@
             android:layout_weight="7"
             android:layout_height="50dp"
             android:textStyle="bold"
-            app:ms_background_color="@color/white"
             app:ms_arrow_tint="@color/black"
             app:ms_text_color="@color/black"
             app:ms_hint_color="@color/black"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:padding="2dp"
+            android:layout_marginEnd="2dp" />
 
     </LinearLayout>
 
@@ -45,15 +48,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="10"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintEnd_toEndOf="@+id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/llStates">
+        app:layout_constraintTop_toBottomOf="@+id/llStates"
+        android:background="@drawable/spinner_border">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="City - "
+            android:text="City "
             android:gravity="center"
             android:textColor="@color/black" />
 
@@ -67,7 +72,9 @@
             app:ms_arrow_tint="@color/black"
             app:ms_text_color="@color/black"
             app:ms_hint_color="@color/black"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:padding="2dp"
+            android:layout_marginEnd="2dp" />
 
     </LinearLayout>
 
@@ -77,15 +84,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="10"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@+id/startGuideline"
         app:layout_constraintEnd_toEndOf="@+id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/llCity">
+        app:layout_constraintTop_toBottomOf="@+id/llCity"
+        android:background="@drawable/spinner_border">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="Area - "
+            android:text="Area"
             android:gravity="center"
             android:textColor="@color/black" />
 
@@ -99,7 +108,9 @@
             app:ms_arrow_tint="@color/black"
             app:ms_text_color="@color/black"
             app:ms_hint_color="@color/black"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:padding="2dp"
+            android:layout_marginEnd="2dp" />
 
     </LinearLayout>
 

@@ -253,6 +253,9 @@ public class OrganizationsList extends AppCompatActivity {
     private void post_area(String cityID) {
 
         area.clear();
+        if (spinnerAdapter_area != null) {
+            spinnerAdapter_area.clear();
+        }
 
         Map<String, String> params = new HashMap<>();
         params.put("CityID", cityID);

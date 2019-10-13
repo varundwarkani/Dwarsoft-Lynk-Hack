@@ -130,6 +130,9 @@ public class AuthenticationDetails extends AppCompatActivity implements GoogleAp
         states.clear();
         city.clear();
         area.clear();
+        if (spinnerAdapter_area != null) {
+            spinnerAdapter_area.clear();
+        }
 
         areaID = db.userDao().getAreaID();
     }
@@ -312,6 +315,10 @@ public class AuthenticationDetails extends AppCompatActivity implements GoogleAp
         try {
             if (jsonObject.getBoolean("isSuccess")) {
                 area.clear();
+
+                if (spinnerAdapter_area != null) {
+                    spinnerAdapter_area.clear();
+                }
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i=0; i<jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);

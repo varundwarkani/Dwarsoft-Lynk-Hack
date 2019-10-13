@@ -53,7 +53,7 @@
     <string name="update">Update</string>
     <string name="complete_header">Do You Want To Help?</string>
     <string name="complete_description">Once you accept, it is not reversible.</string>
-    <string name="complete_header1">Do You Want To Accept?</string>
+    <string name="complete_header1">Do You Want The Help?</string>
     <string name="complete_description1">Once you accept, it is not reversible.</string>
     <string name="close_help">Are you sure you want to close?</string>
     <string name="close_complete">Do you want us to delete your entry?</string>

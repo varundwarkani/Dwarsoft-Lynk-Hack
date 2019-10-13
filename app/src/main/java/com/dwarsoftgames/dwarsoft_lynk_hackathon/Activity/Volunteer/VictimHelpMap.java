@@ -119,6 +119,9 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
         states.clear();
         city.clear();
         area.clear();
+        if (spinnerAdapter_area != null) {
+            spinnerAdapter_area.clear();
+        }
 
         areaID = db.userDao().getAreaID();
     }
@@ -418,6 +421,9 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
         try {
             if (jsonObject.getBoolean("isSuccess")) {
                 area.clear();
+                if (spinnerAdapter_area != null) {
+                    spinnerAdapter_area.clear();
+                }
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i=0; i<jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -465,6 +471,9 @@ public class VictimHelpMap extends AppCompatActivity implements OnMapReadyCallba
         try {
             if (jsonObject.getBoolean("isSuccess")) {
                 area.clear();
+                if (spinnerAdapter_area != null) {
+                    spinnerAdapter_area.clear();
+                }
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i=0; i<jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);

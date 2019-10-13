@@ -1,14 +1,15 @@
 package com.dwarsoftgames.dwarsoft_lynk_hackathon.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.Locale;
+
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Constants.SHAREDPREF;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Permissions.checkCoarseLocation;
 import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Permissions.checkFineLocation;
@@ -43,6 +46,7 @@ import static com.dwarsoftgames.dwarsoft_lynk_hackathon.Utils.Permissions.checkF
 public class HomeScreen extends AppCompatActivity {
 
     private MaterialButton btV, btOrganization;
+    private ImageView ivLanguage;
     private ImageView ivTwitter;
 
     private SharedPreferences sharedPreferences;
@@ -73,6 +77,7 @@ public class HomeScreen extends AppCompatActivity {
     private void init() {
         btV = findViewById(R.id.btV);
         btOrganization = findViewById(R.id.btOrganization);
+        ivLanguage = findViewById(R.id.ivLanguage);
         ivTwitter = findViewById(R.id.ivTwitter);
 
         db = AppDatabase.getAppDatabase(getApplicationContext());
@@ -119,6 +124,13 @@ public class HomeScreen extends AppCompatActivity {
                         startActivity(intent);
                     }
                 }
+            }
+        });
+
+        ivLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeLanguageDialog();
             }
         });
 
@@ -241,5 +253,43 @@ public class HomeScreen extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void changeLanguageDialog() {
+        new AlertDialog.Builder(HomeScreen.this)
+                .setTitle(getString(R.string.language_header))
+                .setMessage(getString(R.string.language_description))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setLocale();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    public void setLocale() {
+
+        Locale locale;
+
+        int language_type = sharedPreferences.getInt("language_type", 1);
+        if (language_type == 1) {
+            locale = new Locale("hi");
+            sharedPreferences.edit().putInt("language_type", 0).apply();
+        } else {
+            locale = new Locale("en");
+            sharedPreferences.edit().putInt("language_type", 1).apply();
+        }
+
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
+        finish();
+        startActivity(getIntent());
+
     }
 }

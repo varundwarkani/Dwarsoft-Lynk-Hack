@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Dwarsoft-Lynk-Hackathon</string>
-    <string name="google_maps_key">AIzaSyB-sj_pBHx3TNa1wOu_3QfIe3FmcSAUsYg</string>
-    <string name="auto">Auto</string>
-    <string name="none_enhance">Original</string> <!-- Move no enhance to first and rename -->
-    <string name="enhance">Lighten</string>
-    <string name="enhance_sharp">Magic Color</string>
+    <string name="app_name" translatable="false">Dwarsoft-Lynk-Hackathon</string>
+    <string name="google_maps_key" translatable="false">AIzaSyB-sj_pBHx3TNa1wOu_3QfIe3FmcSAUsYg</string>
+    <string name="auto" translatable="false">Auto</string>
+    <string name="none_enhance" translatable="false">Original</string> <!-- Move no enhance to first and rename -->
+    <string name="enhance" translatable="false">Lighten</string>
+    <string name="enhance_sharp" translatable="false">Magic Color</string>
     <string name="i_am_a_victim">Victim</string>
     <string name="i_am_a_volunteer">Volunteer</string>
     <string name="i_represent_organization">Organization</string>
@@ -83,4 +83,7 @@
     <string name="state">State</string>
     <string name="city">City</string>
     <string name="area">Area</string>
+    <string name="language_header">Change Language</string>
+    <string name="language_description">Do you want to change your language to Hinglish?</string>
+    <string name="yes">Yes</string>
 </resources>

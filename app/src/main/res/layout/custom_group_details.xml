@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:background="@color/colorPrimary"
     android:layout_margin="5dp"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -44,7 +45,7 @@
         android:layout_weight="1.5"
         android:textSize="14sp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="15dp">
     <TextView
         android:id="@+id/tvDate"
         android:text="Dec 13, 2018"
@@ -80,21 +81,29 @@
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button"
-        android:id="@+id/btOpen"
-        app:rippleColor="@color/white"
-        app:strokeColor="@color/white"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:backgroundTint="@color/green"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:cornerRadius="50dp"
-        android:layout_marginBottom="10dp"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:text="@string/join_group"
-        android:layout_marginTop="10dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
+            android:id="@+id/btOpen"
+            app:rippleColor="@color/white"
+            app:strokeColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_height="50dp"
+
+            android:layout_gravity="center"
+            android:backgroundTint="@color/green"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:cornerRadius="50dp"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
+            android:text="@string/join_group"
+            android:layout_marginTop="5dp" />
+    </RelativeLayout>
 </LinearLayout>

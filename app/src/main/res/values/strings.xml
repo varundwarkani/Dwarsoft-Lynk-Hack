@@ -8,9 +8,9 @@
     <string name="i_am_a_victim">Victim</string>
     <string name="i_am_a_volunteer">Volunteer</string>
     <string name="i_represent_organization">Organization</string>
-    <string name="volunteer_authentication">Volunteer Authentication</string>
+    <string name="volunteer_authentication">Volunteer Sign In</string>
     <string name="phone_number">Phone Number</string>
-    <string name="enter">Enter</string>
+    <string name="enter">Sign In</string>
     <string name="help_someone">Help Someone</string>
     <string name="api_fail">Server Error</string>
     <string name="group_created_success">Group Created Successfully!</string>

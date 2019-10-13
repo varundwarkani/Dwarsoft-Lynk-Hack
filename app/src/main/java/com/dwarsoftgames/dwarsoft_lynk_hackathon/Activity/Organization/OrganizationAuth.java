@@ -138,6 +138,7 @@ public class OrganizationAuth extends AppCompatActivity {
     }
 
     private void openDashboard() {
+        sharedPreferences.edit().putBoolean("org_auth", true).apply();
         Intent intent = new Intent(OrganizationAuth.this, OrganizationDashboard.class);
         startActivity(intent);
         finish();
